@@ -1,0 +1,13 @@
+App.xbf
+MainWindow.xbf
+Styles\Brushes.xbf
+Styles\DarkColors.xbf
+Styles\FontSizes.xbf
+Styles\LightColors.xbf
+Styles\TextBlock.xbf
+Styles\TextBox.xbf
+Styles\Thickness.xbf
+Views\ListDetailsDetailControl.xbf
+Views\ListDetailsPage.xbf
+Views\MainPage.xbf
+Views\ShellPage.xbf

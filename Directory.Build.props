@@ -1,0 +1,44 @@
+<Project>
+	<PropertyGroup Label="Platform Target Values">
+		<PlatformsCurrent>x64;arm64</PlatformsCurrent>
+		<RuntimeIdentifiersCurrent>win-x64;win-arm64</RuntimeIdentifiersCurrent>
+		<WindowsTargetPlatformVersionMinimum>10.0.17763.0</WindowsTargetPlatformVersionMinimum>
+		<WindowsTargetPlatformVersionCurrent>10.0.19041.0</WindowsTargetPlatformVersionCurrent>
+		<WindowsTargetPlatformCurrent>windows$(WindowsTargetPlatformVersionCurrent)</WindowsTargetPlatformCurrent>
+		<NetCoreAppCurrent>net8.0</NetCoreAppCurrent>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Roots">
+		<RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+		<BaseDirectory>$(RepositoryRoot)</BaseDirectory>
+
+		<BaseOutputDirectory>$([MSBuild]::NormalizeDirectory('$(BaseDirectory)', 'Artifacts'))</BaseOutputDirectory>
+
+		<BaseOutputIntermediateDirectory>$([MSBuild]::NormalizeDirectory('$(BaseOutputDirectory)', 'obj', '$(MSBuildProjectName)'))</BaseOutputIntermediateDirectory>
+		<ArtifactsIntermediateDirectory>$([MSBuild]::NormalizeDirectory('$(BaseOutputIntermediateDirectory)', '$(Platform)', '$(Configuration)'))</ArtifactsIntermediateDirectory>
+
+		<BaseOutputBinDirectory>$([MSBuild]::NormalizeDirectory('$(BaseOutputDirectory)', 'bin'))</BaseOutputBinDirectory>
+		<ArtifactsOutputDirectory>$([MSBuild]::NormalizeDirectory('$(BaseOutputBinDirectory)', '$(Platform)', '$(Configuration)'))</ArtifactsOutputDirectory>
+		<PublishOutputDirectory>$([MSBuild]::NormalizeDirectory('$(BaseOutputDirectory)', 'publish', '$(TargetFramework)', $(RuntimeIdentifier), '$(Configuration)'))</PublishOutputDirectory>
+
+		<LibsOutputDirectory>$([MSBuild]::NormalizeDirectory('$(ArtifactsOutputDirectory)', 'libs', $(MSBuildProjectName)))</LibsOutputDirectory>
+		<AppsOutputDirectory>$([MSBuild]::NormalizeDirectory('$(ArtifactsOutputDirectory)', 'apps', '$(MSBuildProjectName)'))</AppsOutputDirectory>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Standard MSBuild Output Path Overrides">
+		<!-- We need base intermediate path be specific for each project since NuGet will put package restore related stuff there -->
+		<BaseIntermediateOutputPath>$(BaseOutputIntermediateDirectory)</BaseIntermediateOutputPath>
+		<IntermediateOutputPath>$(ArtifactsIntermediateDirectory)</IntermediateOutputPath>
+		<IntDir>$(ArtifactsIntermediateDirectory)</IntDir>
+		<OutputPath>$(LibsOutputDirectory)</OutputPath>
+		<OutDir>$(OutputPath)</OutDir>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Global Options">
+		<Platforms>$(PlatformsCurrent)</Platforms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+</Project>

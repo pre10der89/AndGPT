@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "AndGPT.WinUI (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "AndGPT.WinUI (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

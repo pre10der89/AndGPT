@@ -1,0 +1,15 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="DefaultTextColor" Color="{StaticResource OffWhite}"/>
+
+    <SolidColorBrush x:Key="WorkspaceBackgroundColor" Color="{StaticResource DarkGray}"/>
+    <SolidColorBrush x:Key="SidePanelBackgroundColor" Color="{StaticResource DarkDarkGray}"/>
+
+    <SolidColorBrush x:Key="TextBoxBorderColor" Color="{StaticResource MediumDarkGray}"/>
+    <SolidColorBrush x:Key="TextBoxBackgroundColor" Color="{StaticResource Transparent}"/>
+    
+
+</ResourceDictionary>
+
