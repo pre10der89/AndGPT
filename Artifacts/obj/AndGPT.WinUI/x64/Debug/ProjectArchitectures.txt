@@ -1,1 +1,0 @@
-C:\dev\AndGPT\src\apps\WinUI\AndGPT.WinUI\AndGPT.WinUI.csproj;x64
