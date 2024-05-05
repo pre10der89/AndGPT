@@ -5,8 +5,6 @@ using AndGPT.WinUI.Helpers;
 using AndGPT.WinUI.Models;
 
 using Microsoft.Extensions.Options;
-
-using Windows.ApplicationModel;
 using Windows.Storage;
 
 namespace AndGPT.WinUI.Services;

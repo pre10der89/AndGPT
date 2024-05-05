@@ -7,7 +7,6 @@ using CommunityToolkit.Mvvm.Input;
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Navigation;
-using Windows.Storage;
 
 namespace AndGPT.WinUI.ViewModels;
 
@@ -50,7 +49,7 @@ public partial class ShellViewModel : ObservableRecipient
 
     private void OnMenuFileExit() => Application.Current.Exit();
 
-    private void OnMenuViewsListDetails() => NavigationService.NavigateTo(typeof(ListDetailsViewModel).FullName!);
+    private void OnMenuViewsListDetails() => NavigationService.NavigateTo(typeof(LetsChatViewModel).FullName!);
 
-    private void OnMenuViewsMain() => NavigationService.NavigateTo(typeof(MainViewModel).FullName!);
+    private void OnMenuViewsMain() => NavigationService.NavigateTo(typeof(SomethingElseViewModel).FullName!);
 }

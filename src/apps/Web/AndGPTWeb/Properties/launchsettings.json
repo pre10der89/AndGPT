@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "AndGPTWeb (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "AndGPTWeb (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

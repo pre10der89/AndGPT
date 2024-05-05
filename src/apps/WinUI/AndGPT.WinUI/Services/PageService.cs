@@ -14,8 +14,8 @@ public class PageService : IPageService
 
     public PageService()
     {
-        Configure<MainViewModel, MainPage>();
-        Configure<ListDetailsViewModel, ListDetailsPage>();
+        Configure<SomethingElseViewModel, MainPage>();
+        Configure<LetsChatViewModel, LetsChatPage>();
     }
 
     public Type GetPageType(string key)

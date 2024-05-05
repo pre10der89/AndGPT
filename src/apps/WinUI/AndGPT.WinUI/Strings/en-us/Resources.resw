@@ -148,4 +148,25 @@
   <data name="Main_Title_2.Text" xml:space="preserve">
     <value>Main2</value>
   </data>
+  <data name="AvailableModels_Choice_AGI" xml:space="preserve">
+    <value>AGI</value>
+  </data>
+  <data name="AvailableModels_Choice_GPT35" xml:space="preserve">
+    <value>AndGPT 3.6</value>
+  </data>
+  <data name="AvailableModels_Choice_GPT40" xml:space="preserve">
+    <value>AndGPT 4.1</value>
+  </data>
+  <data name="Footer_Workspace_Disclaimer_Text.Text" xml:space="preserve">
+    <value>AndGPT can make mistakes.  Consider checking important information.</value>
+  </data>
+  <data name="Footer_Help_Menu_Show_Help.Text" xml:space="preserve">
+    <value>Help &amp; FAQ</value>
+  </data>
+  <data name="Footer_Help_Menu_Show_Policies.Text" xml:space="preserve">
+    <value>Terms &amp; policies</value>
+  </data>
+  <data name="Footer_Help_Menu_Show_ReleaseNotes.Text" xml:space="preserve">
+    <value>Release notes</value>
+  </data>
 </root>

@@ -54,4 +54,11 @@
         <Setter Property="Foreground" Value="{StaticResource DefaultTextColor}"/>
     </Style>
 
+    <Style x:Key="DisclaimerTextStyle" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="SemiLight" />
+        <Setter Property="FontSize" Value="{StaticResource XSmallFontSize}" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="Foreground" Value="{StaticResource DefaultTextColor}"/>
+    </Style>
+
 </ResourceDictionary>

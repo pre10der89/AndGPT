@@ -2,7 +2,6 @@
 using AndGPT.WinUI.Contracts.Services;
 using AndGPT.WinUI.Core.Contracts.Services;
 using AndGPT.WinUI.Core.Services;
-using AndGPT.WinUI.Helpers;
 using AndGPT.WinUI.Models;
 using AndGPT.WinUI.Services;
 using AndGPT.WinUI.ViewModels;
@@ -67,12 +66,16 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
-            services.AddTransient<ListDetailsViewModel>();
-            services.AddTransient<ListDetailsPage>();
-            services.AddTransient<MainViewModel>();
+            services.AddTransient<LetsChatViewModel>();
+            services.AddTransient<LetsChatPage>();
+            services.AddTransient<SomethingElseViewModel>();
             services.AddTransient<MainPage>();
             services.AddTransient<ShellPage>();
             services.AddTransient<ShellViewModel>();
+            services.AddTransient<ChatWorkspaceViewModel>();
+            services.AddTransient<HeaderWorkspaceViewModel>();
+            services.AddTransient<FooterWorkspaceViewModel>();
+            services.AddTransient<MainWorkspaceViewModel>();
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));

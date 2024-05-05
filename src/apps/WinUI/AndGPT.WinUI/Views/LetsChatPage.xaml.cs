@@ -1,21 +1,19 @@
 ﻿using AndGPT.WinUI.ViewModels;
-
 using CommunityToolkit.WinUI.UI.Controls;
-
 using Microsoft.UI.Xaml.Controls;
 
 namespace AndGPT.WinUI.Views;
 
-public sealed partial class ListDetailsPage : Page
+public sealed partial class LetsChatPage : Page
 {
-    public ListDetailsViewModel ViewModel
+    public LetsChatViewModel ViewModel
     {
         get;
     }
 
-    public ListDetailsPage()
+    public LetsChatPage()
     {
-        ViewModel = App.GetService<ListDetailsViewModel>();
+        ViewModel = App.GetService<LetsChatViewModel>();
         InitializeComponent();
     }
 

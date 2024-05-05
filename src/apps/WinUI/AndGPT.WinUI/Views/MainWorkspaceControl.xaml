@@ -1,73 +1,86 @@
 ﻿<UserControl
-    x:Class="AndGPT.WinUI.Views.ListDetailsDetailControl"
+    x:Class="AndGPT.WinUI.Views.MainWorkspaceControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <ScrollViewer
-        Name="ForegroundElement"
-        HorizontalAlignment="Stretch"
-        VerticalScrollMode="Enabled"
-        IsTabStop="True">
-        <StackPanel HorizontalAlignment="Left">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <FontIcon
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="48"
-                    Glyph="{x:Bind ListDetailsMenuItem.Symbol, Mode=OneWay}"
-                    AutomationProperties.Name="{x:Bind ListDetailsMenuItem.SymbolName, Mode=OneWay}"  />
-                <TextBlock
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      VerticalScrollMode="Auto"
+                      IsTabStop="True">
+            <!--<Grid VerticalAlignment="Stretch" Background="Red" Height="Auto" Width="500"/>-->
+            <StackPanel HorizontalAlignment="Center" Height="Auto" Width="600">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                    <TextBlock
                     Margin="{StaticResource SmallLeftMargin}"
                     VerticalAlignment="Center"
-                    Text="{x:Bind ListDetailsMenuItem.Company, Mode=OneWay}"
+                    Text="Company"
                     Style="{ThemeResource TitleTextBlockStyle}" />
-            </StackPanel>
-            <StackPanel Padding="0,15,0,0">
-                <TextBlock Text="Status" Style="{StaticResource DetailSubTitleStyle}" />
+                </StackPanel>
+                <StackPanel Padding="0,15,0,0">
+                    <TextBlock Text="Status" Style="{StaticResource DetailSubTitleStyle}" />
 
-                <TextBlock Text="{x:Bind ListDetailsMenuItem.Status, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                    <TextBlock Text="Status" Style="{StaticResource DetailBodyBaseMediumStyle}" />
 
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Text="Order date"
                     Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock Text="{x:Bind ListDetailsMenuItem.OrderDate, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-                <TextBlock
+                    <TextBlock Text="OrderDate" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Text="Company"
                     Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock Text="{x:Bind ListDetailsMenuItem.Company, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                    <TextBlock Text="Company" Style="{StaticResource DetailBodyBaseMediumStyle}" />
 
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Text="Ship to"
                     Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock Text="{x:Bind ListDetailsMenuItem.ShipTo, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
-                <TextBlock
+                    <TextBlock Text="ShipTo" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Text="Order total"
                     Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock Text="{x:Bind ListDetailsMenuItem.OrderTotal, Mode=OneWay}" Style="{StaticResource DetailBodyBaseMediumStyle}" />
+                    <TextBlock Text="OrderTotal" Style="{StaticResource DetailBodyBaseMediumStyle}" />
 
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource MediumTopMargin}"
                     Text="Note 1"
                     Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock
+                    <TextBlock
                     Style="{StaticResource DetailBodyStyle}"
                     Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;" />
 
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource SmallTopMargin}"
                     Text="Note 2"
                     Style="{StaticResource DetailSubTitleStyle}" />
-                <TextBlock
+                    <TextBlock
                     Margin="{StaticResource MediumBottomMargin}"
                     Style="{StaticResource DetailBodyStyle}"
                     Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis quis hendrerit nulla, vel molestie libero. In nec ultricies magna, ultricies molestie ipsum. Mauris non dignissim velit. Etiam malesuada blandit mauris eu maximus. Quisque ornare, felis nec scelerisque mollis, risus dolor posuere magna, in gravida quam mi id nisi. Nullam mattis consequat ex. Cras nulla neque, dictum ac urna et, vestibulum feugiat ex. Pellentesque malesuada accumsan ligula, vel fringilla lacus facilisis sit amet. Proin convallis tempor arcu, ac placerat libero pretium ut. Praesent hendrerit nisl at lobortis viverra. Fusce vitae velit odio. Nam ut tortor sed purus finibus sollicitudin quis at ante. Ut sodales dolor vel eros mollis suscipit. Donec eu nulla id urna ultricies consequat. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;" />
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2" VerticalAlignment="Bottom" Width="500">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Style="{StaticResource PromptTextBoxStyle}"/>
+            <Button Grid.Column="2" Width="35" Height="50" Style="{StaticResource SimpleGlyphButtonStyle}" Content="&#xE110;"/>
+        </Grid>
+    </Grid>
 </UserControl>

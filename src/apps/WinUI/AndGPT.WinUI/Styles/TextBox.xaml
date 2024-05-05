@@ -21,7 +21,7 @@
         <Setter Property="BorderThickness" Value="{StaticResource XXXSmallUniform}"/>
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="AcceptsReturn" Value="True" />
-        <Setter Property="MaxHeight" Value="170"/>
+        <Setter Property="MaxHeight" Value="120"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />

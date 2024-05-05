@@ -8,19 +8,18 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace AndGPT.WinUI.ViewModels;
 
-public partial class ListDetailsViewModel : ObservableRecipient, INavigationAware
+public partial class LetsChatViewModel : ObservableRecipient, INavigationAware
 {
     private readonly ISampleDataService _sampleDataService;
-
-    [ObservableProperty]
-    private SampleOrder? selected;
-
     public ObservableCollection<SampleOrder> SampleItems { get; private set; } = new ObservableCollection<SampleOrder>();
 
-    public ListDetailsViewModel(ISampleDataService sampleDataService)
+    public LetsChatViewModel(ISampleDataService sampleDataService)
     {
         _sampleDataService = sampleDataService;
     }
+
+    [ObservableProperty]
+    private SampleOrder? selected;
 
     public async void OnNavigatedTo(object parameter)
     {

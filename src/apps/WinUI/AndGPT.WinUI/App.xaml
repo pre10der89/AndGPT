@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="/Styles/Thickness.xaml" />
                 <ResourceDictionary Source="/Styles/TextBlock.xaml" />
                 <ResourceDictionary Source="/Styles/TextBox.xaml" />
+                <ResourceDictionary Source="/Styles/Buttons.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!--TODO: Load Fonts -->
