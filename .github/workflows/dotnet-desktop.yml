@@ -59,17 +59,17 @@ jobs:
     env:
       Artifacts_Root_Directory:  ${{ github.workspace }}/Artifacts
       Src_Root_Directory:  ${{ github.workspace }}/src
-      Apps_Root_Directory:  $env:Src_Root_Directory/apps
+      Apps_Root_Directory: ${{ Src_Root_Directory }}/apps
 
 
-      TargetApp_Solution_Directory: $env:Apps_Root_Directory/web
-      Solution_Name: $env:TargetApp_Solution_Directory/AndGPTWeb.sln
+      TargetApp_Solution_Directory: ${{ Apps_Root_Directory }}/web
+      Solution_Name: ${{ TargetApp_Solution_Directory }}/AndGPTWeb.sln
       # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
-      App_Packages_Directory: $env:Artifacts_Root_Directory/AppPackages
+      App_Packages_Directory: ${{ Artifacts_Root_Directory }}/AppPackages
       App_Packages_Archive: AppPackages.zip      
-      Wap_Project_Directory: $env:Artifacts_Root_Directory
-      Wap_Project_Path: $env:TargetApp_Solution_Directory/AndGPT/AndGPTWeb.csproj
+      Wap_Project_Directory: ${{ Artifacts_Root_Directory }}
+      Wap_Project_Path: ${{ TargetApp_Solution_Directory }}/AndGPT/AndGPTWeb.csproj
 
     steps:
     - name: Checkout
