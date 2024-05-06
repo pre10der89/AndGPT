@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using AndGPT.UI.Core.Helpers;
 using AndGPT.WinUI.Core.Contracts.Services;
-using AndGPT.WinUI.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -40,7 +40,6 @@ public partial class HeaderWorkspaceViewModel : ObservableRecipient
 
     private void OnExecuteTransformerSelectedCommand()
     {
-        var domainModel = SelectedTransformer?.TransformerName ?? string.Empty;
     }
 
     #endregion

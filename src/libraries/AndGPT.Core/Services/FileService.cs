@@ -1,10 +1,10 @@
 ﻿using System.Text;
-
-using AndGPT.WinUI.Core.Contracts.Services;
-
+using AndGPT.Core.Contracts.Services;
 using Newtonsoft.Json;
 
-namespace AndGPT.WinUI.Core.Services;
+#pragma warning disable CS8603 // Possible null reference return.
+
+namespace AndGPT.Core.Services;
 
 public class FileService : IFileService
 {

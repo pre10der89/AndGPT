@@ -1,6 +1,6 @@
-﻿using AndGPTWeb.Helpers;
-
-using Windows.UI.ViewManagement;
+﻿using Windows.UI.ViewManagement;
+using AndGPT.UI.Core.Helpers;
+using AndGPTWeb.Helpers;
 
 namespace AndGPTWeb;
 

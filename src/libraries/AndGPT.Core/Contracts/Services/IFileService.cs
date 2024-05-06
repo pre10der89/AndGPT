@@ -1,4 +1,4 @@
-﻿namespace AndGPT.WinUI.Core.Contracts.Services;
+﻿namespace AndGPT.Core.Contracts.Services;
 
 public interface IFileService
 {

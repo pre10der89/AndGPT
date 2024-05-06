@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-
+using AndGPT.UI.Core.Helpers;
 using AndGPT.WinUI.Contracts.Services;
 using AndGPT.WinUI.Contracts.ViewModels;
-using AndGPT.WinUI.Helpers;
-
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 

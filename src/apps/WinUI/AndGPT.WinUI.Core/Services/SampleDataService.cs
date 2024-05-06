@@ -64,7 +64,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 28,
+                                ProductId = 28,
                                 ProductName = "Rössle Sauerkraut",
                                 Quantity = 15,
                                 Discount = 0.25,
@@ -76,7 +76,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 39,
+                                ProductId = 39,
                                 ProductName = "Chartreuse verte",
                                 Quantity = 21,
                                 Discount = 0.25,
@@ -88,7 +88,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 46,
+                                ProductId = 46,
                                 ProductName = "Spegesild",
                                 Quantity = 2,
                                 Discount = 0.25,
@@ -119,7 +119,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 59,
+                                ProductId = 59,
                                 ProductName = "Raclette Courdavault",
                                 Quantity = 15,
                                 Discount = 0,
@@ -131,7 +131,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 77,
+                                ProductId = 77,
                                 ProductName = "Original Frankfurter grüne Soße",
                                 Quantity = 2,
                                 Discount = 0.2,
@@ -162,7 +162,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 6,
+                                ProductId = 6,
                                 ProductName = "Grandma's Boysenberry Spread",
                                 Quantity = 16,
                                 Discount = 0.05,
@@ -174,7 +174,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 28,
+                                ProductId = 28,
                                 ProductName = "Rössle Sauerkraut",
                                 Quantity = 2,
                                 Discount = 0,
@@ -221,7 +221,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 14,
+                                ProductId = 14,
                                 ProductName = "Tofu",
                                 Quantity = 3,
                                 Discount = 0,
@@ -233,7 +233,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 42,
+                                ProductId = 42,
                                 ProductName = "Singaporean Hokkien Fried Mee",
                                 Quantity = 5,
                                 Discount = 0,
@@ -245,7 +245,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 60,
+                                ProductId = 60,
                                 ProductName = "Camembert Pierrot",
                                 Quantity = 10,
                                 Discount = 0,
@@ -276,7 +276,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 11,
+                                ProductId = 11,
                                 ProductName = "Queso Cabrales",
                                 Quantity = 2,
                                 Discount = 0,
@@ -288,7 +288,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 13,
+                                ProductId = 13,
                                 ProductName = "Konbu",
                                 Quantity = 10,
                                 Discount = 0,
@@ -300,7 +300,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 19,
+                                ProductId = 19,
                                 ProductName = "Teatime Chocolate Biscuits",
                                 Quantity = 7,
                                 Discount = 0,
@@ -312,7 +312,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 72,
+                                ProductId = 72,
                                 ProductName = "Mozzarella di Giovanni",
                                 Quantity = 10,
                                 Discount = 0,
@@ -359,7 +359,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 43,
+                                ProductId = 43,
                                 ProductName = "Ipoh Coffee",
                                 Quantity = 15,
                                 Discount = 0.15,
@@ -371,7 +371,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 48,
+                                ProductId = 48,
                                 ProductName = "Chocolade",
                                 Quantity = 15,
                                 Discount = 0.15,
@@ -402,7 +402,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 17,
+                                ProductId = 17,
                                 ProductName = "Alice Mutton",
                                 Quantity = 18,
                                 Discount = 0,
@@ -414,7 +414,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 34,
+                                ProductId = 34,
                                 ProductName = "Sasquatch Ale",
                                 Quantity = 40,
                                 Discount = 0,
@@ -426,7 +426,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 53,
+                                ProductId = 53,
                                 ProductName = "Perth Pasties",
                                 Quantity = 25,
                                 Discount = 0,
@@ -457,7 +457,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 33,
+                                ProductId = 33,
                                 ProductName = "Geitost",
                                 Quantity = 30,
                                 Discount = 0,
@@ -469,7 +469,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 66,
+                                ProductId = 66,
                                 ProductName = "Louisiana Hot Spiced Okra",
                                 Quantity = 4,
                                 Discount = 0,
@@ -481,7 +481,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 75,
+                                ProductId = 75,
                                 ProductName = "Rhönbräu Klosterbier",
                                 Quantity = 30,
                                 Discount = 0,
@@ -528,7 +528,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 28,
+                                ProductId = 28,
                                 ProductName = "Rössle Sauerkraut",
                                 Quantity = 15,
                                 Discount = 0.25,
@@ -540,7 +540,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 39,
+                                ProductId = 39,
                                 ProductName = "Chartreuse verte",
                                 Quantity = 21,
                                 Discount = 0.25,
@@ -552,7 +552,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 46,
+                                ProductId = 46,
                                 ProductName = "Spegesild",
                                 Quantity = 2,
                                 Discount = 0.25,
@@ -583,7 +583,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 59,
+                                ProductId = 59,
                                 ProductName = "Raclette Courdavault",
                                 Quantity = 15,
                                 Discount = 0,
@@ -595,7 +595,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 77,
+                                ProductId = 77,
                                 ProductName = "Original Frankfurter grüne Soße",
                                 Quantity = 2,
                                 Discount = 0.2,
@@ -626,7 +626,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 6,
+                                ProductId = 6,
                                 ProductName = "Grandma's Boysenberry Spread",
                                 Quantity = 16,
                                 Discount = 0.05,
@@ -638,7 +638,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 28,
+                                ProductId = 28,
                                 ProductName = "Rössle Sauerkraut",
                                 Quantity = 2,
                                 Discount = 0,
@@ -685,7 +685,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 14,
+                                ProductId = 14,
                                 ProductName = "Tofu",
                                 Quantity = 3,
                                 Discount = 0,
@@ -697,7 +697,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 42,
+                                ProductId = 42,
                                 ProductName = "Singaporean Hokkien Fried Mee",
                                 Quantity = 5,
                                 Discount = 0,
@@ -709,7 +709,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 60,
+                                ProductId = 60,
                                 ProductName = "Camembert Pierrot",
                                 Quantity = 10,
                                 Discount = 0,
@@ -740,7 +740,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 11,
+                                ProductId = 11,
                                 ProductName = "Queso Cabrales",
                                 Quantity = 2,
                                 Discount = 0,
@@ -752,7 +752,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 13,
+                                ProductId = 13,
                                 ProductName = "Konbu",
                                 Quantity = 10,
                                 Discount = 0,
@@ -764,7 +764,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 19,
+                                ProductId = 19,
                                 ProductName = "Teatime Chocolate Biscuits",
                                 Quantity = 7,
                                 Discount = 0,
@@ -776,7 +776,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 72,
+                                ProductId = 72,
                                 ProductName = "Mozzarella di Giovanni",
                                 Quantity = 10,
                                 Discount = 0,
@@ -823,7 +823,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 43,
+                                ProductId = 43,
                                 ProductName = "Ipoh Coffee",
                                 Quantity = 15,
                                 Discount = 0.15,
@@ -835,7 +835,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 48,
+                                ProductId = 48,
                                 ProductName = "Chocolade",
                                 Quantity = 15,
                                 Discount = 0.15,
@@ -866,7 +866,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 17,
+                                ProductId = 17,
                                 ProductName = "Alice Mutton",
                                 Quantity = 18,
                                 Discount = 0,
@@ -878,7 +878,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 34,
+                                ProductId = 34,
                                 ProductName = "Sasquatch Ale",
                                 Quantity = 40,
                                 Discount = 0,
@@ -890,7 +890,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 53,
+                                ProductId = 53,
                                 ProductName = "Perth Pasties",
                                 Quantity = 25,
                                 Discount = 0,
@@ -921,7 +921,7 @@ public class SampleDataService : ISampleDataService
                         {
                             new SampleOrderDetail()
                             {
-                                ProductID = 33,
+                                ProductId = 33,
                                 ProductName = "Geitost",
                                 Quantity = 30,
                                 Discount = 0,
@@ -933,7 +933,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 66,
+                                ProductId = 66,
                                 ProductName = "Louisiana Hot Spiced Okra",
                                 Quantity = 4,
                                 Discount = 0,
@@ -945,7 +945,7 @@ public class SampleDataService : ISampleDataService
                             },
                             new SampleOrderDetail()
                             {
-                                ProductID = 75,
+                                ProductId = 75,
                                 ProductName = "Rhönbräu Klosterbier",
                                 Quantity = 30,
                                 Discount = 0,

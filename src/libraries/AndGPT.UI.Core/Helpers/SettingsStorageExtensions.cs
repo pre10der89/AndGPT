@@ -1,9 +1,8 @@
-﻿using AndGPT.WinUI.Core.Helpers;
-
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.Storage.Streams;
+using AndGPT.Core.Helpers;
 
-namespace AndGPT.WinUI.Helpers;
+namespace AndGPT.UI.Core.Helpers;
 
 // Use these extension methods to store and retrieve local and roaming app data
 // More details regarding storing and retrieving app data at https://docs.microsoft.com/windows/apps/design/app-settings/store-and-retrieve-app-data
@@ -18,6 +17,10 @@ public static class SettingsStorageExtensions
 
     public static async Task SaveAsync<T>(this StorageFolder folder, string name, T content)
     {
+        if (content is null)
+        {
+            return;
+        }
         var file = await folder.CreateFileAsync(GetFileName(name), CreationCollisionOption.ReplaceExisting);
         var fileContent = await Json.StringifyAsync(content);
 
@@ -39,6 +42,11 @@ public static class SettingsStorageExtensions
 
     public static async Task SaveAsync<T>(this ApplicationDataContainer settings, string key, T value)
     {
+        if (value is null)
+        {
+            return;
+        }
+
         settings.SaveString(key, await Json.StringifyAsync(value));
     }
 

@@ -1,11 +1,12 @@
 ﻿using AndGPT.WinUI.Contracts.Services;
-using AndGPT.WinUI.Helpers;
 using AndGPT.WinUI.ViewModels;
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Windows.System;
+using AndGPT.UI.Core.Helpers;
+using AndGPT.WinUI.Helpers;
 
 namespace AndGPT.WinUI.Views;
 

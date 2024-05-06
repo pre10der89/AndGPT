@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace AndGPT.WinUI.Core.Helpers;
+#pragma warning disable CS8603 // Possible null reference return.
+
+namespace AndGPT.Core.Helpers;
 
 public static class Json
 {

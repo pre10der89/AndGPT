@@ -11,6 +11,9 @@
 	<PropertyGroup Label="Roots">
 		<RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
 		<BaseDirectory>$(RepositoryRoot)</BaseDirectory>
+		<BaseSourceDirectory>$(BaseDirectory)/src</BaseSourceDirectory>
+		<AppsBasePath>$(BaseSourceDirectory)/apps</AppsBasePath>
+		<LibrariesBasePath>$(BaseSourceDirectory)/libraries</LibrariesBasePath>
 
 		<BaseOutputDirectory>$([MSBuild]::NormalizeDirectory('$(BaseDirectory)', 'Artifacts'))</BaseOutputDirectory>
 

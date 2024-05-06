@@ -1,6 +1,4 @@
 ﻿using AndGPTWeb.Contracts.Services;
-using AndGPTWeb.Core.Contracts.Services;
-using AndGPTWeb.Core.Helpers;
 using AndGPTWeb.Helpers;
 using AndGPTWeb.Models;
 
@@ -8,6 +6,10 @@ using Microsoft.Extensions.Options;
 
 using Windows.ApplicationModel;
 using Windows.Storage;
+using AndGPT.Core.Contracts.Services;
+using AndGPT.Core.Helpers;
+using AndGPT.UI.Core.Helpers;
+
 #pragma warning disable CS8604 // Possible null reference argument.
 
 namespace AndGPTWeb.Services;

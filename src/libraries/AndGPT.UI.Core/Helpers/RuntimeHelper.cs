@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 
-namespace AndGPTWeb.Helpers;
+namespace AndGPT.UI.Core.Helpers;
 
 public class RuntimeHelper
 {

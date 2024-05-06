@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
+		<RootNamespace>AndGPT.Core</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Converters\**" />
+	  <EmbeddedResource Remove="Converters\**" />
+	  <None Remove="Converters\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
+	</ItemGroup>
+</Project>

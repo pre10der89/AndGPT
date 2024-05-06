@@ -1,6 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 
-namespace AndGPTWeb.Helpers;
+namespace AndGPT.UI.Core.Helpers;
 
 public static class FrameExtensions
 {

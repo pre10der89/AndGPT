@@ -1,9 +1,10 @@
-﻿namespace AndGPT.WinUI.Core.Models;
+﻿#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+namespace AndGPT.WinUI.Core.Models;
 
 // Model for the SampleDataService. Replace with your own model.
 public class SampleOrderDetail
 {
-    public long ProductID
+    public long ProductId
     {
         get; set;
     }
@@ -48,5 +49,5 @@ public class SampleOrderDetail
         get; set;
     }
 
-    public string ShortDescription => $"Product ID: {ProductID} - {ProductName}";
+    public string ShortDescription => $"Product ID: {ProductId} - {ProductName}";
 }

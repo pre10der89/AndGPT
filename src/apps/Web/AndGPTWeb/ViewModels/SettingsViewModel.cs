@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 
 using Windows.ApplicationModel;
+using AndGPT.UI.Core.Helpers;
 
 namespace AndGPTWeb.ViewModels;
 

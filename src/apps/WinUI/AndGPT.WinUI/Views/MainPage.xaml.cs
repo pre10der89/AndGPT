@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using AndGPT.WinUI;
 using AndGPT.WinUI.ViewModels;
-using AndGPT.WinUI.Views;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Newtonsoft.Json.Linq;
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 namespace AndGPT.WinUI.Views;
 
@@ -14,54 +14,47 @@ public sealed partial class MainPage : Page
         get;
     }
 
-    private ObservableCollection<NavLink> _navLinks = new ObservableCollection<NavLink>()
-    {
-        new NavLink() { Label = "People", Symbol = Symbol.People  },
-        new NavLink() { Label = "Globe", Symbol = Symbol.Globe },
-        new NavLink() { Label = "Message", Symbol = Symbol.Message },
-        new NavLink() { Label = "Mail", Symbol = Symbol.Mail },
-    };
-
     public ObservableCollection<NavLink> NavLinks
     {
-        get
-        {
-            return _navLinks;
-        }
-    }
+        get;
+    } =
+    [
+        new NavLink() { Label = "People", Symbol = Symbol.People },
+        new NavLink() { Label = "Globe", Symbol = Symbol.Globe },
+        new NavLink() { Label = "Message", Symbol = Symbol.Message },
+        new NavLink() { Label = "Mail", Symbol = Symbol.Mail }
+    ];
 
     public MainPage()
     {
         ViewModel = App.GetService<SomethingElseViewModel>();
-        this.InitializeComponent();
+        InitializeComponent();
     }
 
     private void NavLinksList_ItemClick(object sender, ItemClickEventArgs e)
     {
-        content.Text = (e.ClickedItem as NavLink).Label + " Page";
+        if (e.ClickedItem is NavLink navLink)
+        {
+            content.Text = navLink.Label + " Page";
+        }
     }
 
     private void PanePlacement_Toggled(object sender, RoutedEventArgs e)
     {
-        var ts = sender as ToggleSwitch;
-        if (ts.IsOn)
+        if (sender is ToggleSwitch ts)
         {
-            splitView.PanePlacement = SplitViewPanePlacement.Right;
-        }
-        else
-        {
-            splitView.PanePlacement = SplitViewPanePlacement.Left;
+            splitView.PanePlacement = ts.IsOn ? SplitViewPanePlacement.Right : SplitViewPanePlacement.Left;
         }
     }
 
-    private void displayModeCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void displayModeCombobox_SelectionChanged(object _, SelectionChangedEventArgs e)
     {
-        splitView.DisplayMode = (SplitViewDisplayMode)Enum.Parse(typeof(SplitViewDisplayMode), (e.AddedItems[0] as ComboBoxItem).Content.ToString());
+        splitView.DisplayMode = (SplitViewDisplayMode)Enum.Parse(typeof(SplitViewDisplayMode), ((ComboBoxItem)e.AddedItems[0]).Content.ToString() ?? string.Empty);
     }
 
-    private void paneBackgroundCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void paneBackgroundCombobox_SelectionChanged(object _, SelectionChangedEventArgs e)
     {
-        var colorString = (e.AddedItems[0] as ComboBoxItem).Content.ToString();
+        var colorString = (e.AddedItems[0] as ComboBoxItem)?.Content.ToString();
 
         VisualStateManager.GoToState(this, colorString, false);
     }

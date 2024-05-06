@@ -39,6 +39,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\AndGPT.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.UI.Core\AndGPT.UI.Core.csproj" />
 		<ProjectReference Include="..\AndGPT.WinUI.Core\AndGPT.WinUI.Core.csproj" />
 	</ItemGroup>
 
