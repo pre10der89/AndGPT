@@ -18,6 +18,23 @@ For projects without MSIX packaging, follow the [deployment guide](https://docs.
 
 See [README.md](https://github.com/microsoft/TemplateStudio/blob/main/docs/WinUI/pipelines/README.md) for guidance on building and testing projects in CI pipelines.
 
+https://learn.microsoft.com/en-us/windows/msix/package/create-certificate-package-signing
+
+To Base64 Encode the PFX file:
+
+$pfx_cert = Get-Content '<projectpath>\<projectname>_TemporaryKey.pfx' -Encoding Byte
+[System.Convert]::ToBase64String($pfx_cert) | Out-File 'SigningCertificate_Encoded.txt'
+
+In GitHub Repository add a secret for the encoded PFX file
+
+Secret Name: BASE64_ENCODED_PFX
+Secret Value: The text from 'SigningCertificate_Encoded.txt'
+
+The PFX password also needs to be set as a secret:
+
+Secret Name: PFX_KEY
+Secret Value: Whatever value was used in the AppXManifest Create Certificate
+
 ## Changelog
 
 See [releases](https://github.com/microsoft/TemplateStudio/releases) and [milestones](https://github.com/microsoft/TemplateStudio/milestones).

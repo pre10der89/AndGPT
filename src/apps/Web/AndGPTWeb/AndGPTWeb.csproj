@@ -18,7 +18,7 @@
 		<OutputPath>$(AppsOutputDirectory)</OutputPath>
 		<OutDir>$(OutputPath)</OutDir>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-		<PackageCertificateThumbprint>B4EB1C43EEB8EBB90CF4F34C9B27ACA1BC95309E</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>10282762E487556703D2D4CC175A92627D4F3BF4</PackageCertificateThumbprint>
 	</PropertyGroup>
 
 	<ItemGroup>
