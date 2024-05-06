@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using AndGPT.UI.Core.Contracts.ViewModels;
 using AndGPT.UI.Core.Helpers;
 using AndGPTWeb.Contracts.Services;
-using AndGPTWeb.Contracts.ViewModels;
 using AndGPTWeb.Helpers;
 
 using Microsoft.UI.Xaml.Controls;

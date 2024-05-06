@@ -1,6 +1,5 @@
-﻿using AndGPTWeb.Contracts.Services;
-using AndGPTWeb.Contracts.ViewModels;
-
+﻿using AndGPT.UI.Core.Contracts.ViewModels;
+using AndGPTWeb.Contracts.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 

@@ -1,4 +1,4 @@
-﻿namespace AndGPT.WinUI.Contracts.ViewModels;
+﻿namespace AndGPT.UI.Core.Contracts.ViewModels;
 
 public interface INavigationAware
 {

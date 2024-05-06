@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-
-using AndGPT.WinUI.Contracts.ViewModels;
+using AndGPT.UI.Core.Contracts.ViewModels;
 using AndGPT.WinUI.Core.Contracts.Services;
 using AndGPT.WinUI.Core.Models;
 
