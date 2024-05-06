@@ -65,7 +65,7 @@ jobs:
 
       App_Root_Directory:   ${{ github.workspace }}/src/apps/web
       App_Packages_Archive: AppPackages.zip      
-      Wap_Project_Directory: AndGPTWeb.Package
+      Wap_Project_Directory: Artifacts
       Wap_Project_Path: $env:App_Root_Directory/AndGPT/AndGPTWeb.csproj
 
     steps:
