@@ -145,6 +145,6 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: Zip
+        name: AndGetWeb
         path: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/AndGPTWeb/**/*
         retention-days: 5
