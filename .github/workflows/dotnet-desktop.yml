@@ -36,7 +36,7 @@
 # For a complete CI/CD sample to get started with GitHub Action workflows for Desktop Applications,
 # refer to https://github.com/microsoft/github-actions-for-desktop-apps d
 
-name: .NET Core Desktop
+name: AndGPTWeb
 
 on:
   push:
@@ -146,5 +146,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Zip
-        path: ${{ github.workspace }}/Artifacts/**/*
+        path: ${{ github.workspace }}/Artifacts/${{ matrix.platform }}/${{ matrix.configuration }}/apps/AndGPTWeb/**/*
         retention-days: 5
