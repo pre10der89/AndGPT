@@ -51,16 +51,22 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-        architecture: [x64]
+        targetPlatform: [x64]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      Solution_Name: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln
+      App_Packages_Directory: AppPackages
+      SigningCertificate: GitHubActionsDemo.pfx
+      #Solution_Name: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln
+      Solution_Name: $env:App_Root_Directory/AndGPTWeb.sln
       # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-      Wap_Project_Directory: Artifacts                            # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-      Wap_Project_Path: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln #AndGPTWeb.Package/AndGPTWeb.wapproj       # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+
+      App_Root_Directory:   ${{ github.workspace }}/src/apps/web
+      App_Packages_Archive: AppPackages.zip      
+      Wap_Project_Directory: AndGPTWeb.Package
+      Wap_Project_Path: $env:App_Root_Directory/AndGPT/AndGPTWeb.csproj
 
     steps:
     - name: Checkout
@@ -88,12 +94,6 @@ jobs:
     # - name: Execute unit tests
     #  run: dotnet test
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
-
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
       run: |
@@ -101,9 +101,16 @@ jobs:
         $certificatePath = Join-Path -Path $env:Wap_Project_Directory -ChildPath GitHubActionsWorkflow.pfx
         [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
 
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration  /p:RuntimeIdentifier=$env:RuntimeIdentifier
+      env:
+        Configuration: ${{ matrix.configuration }}
+        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
-      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
+      run: msbuild $env:Solution_Name /p:Platform=$env:TargetPlatform /p:Configuration=$env:Configuration /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
       env:
         Appx_Bundle: Always
         Appx_Bundle_Platforms: x64 #x86|x64
