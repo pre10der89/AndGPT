@@ -58,8 +58,8 @@ jobs:
     env:
       Solution_Name: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln
       # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-      Wap_Project_Directory: AndGPTWeb.Package                    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-      Wap_Project_Path: AndGPTWeb.Package/AndGPTWeb.wapproj       # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+      Wap_Project_Directory: Artifacts                            # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
+      Wap_Project_Path: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln #AndGPTWeb.Package/AndGPTWeb.wapproj       # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
     steps:
     - name: Checkout
