@@ -51,7 +51,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Debug, Release]
-        targetPlatform: [x64]
+        platform: [x64]
 
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
@@ -106,10 +106,11 @@ jobs:
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
-      run: msbuild $env:Target_Solution_Path /t:Restore /p:Configuration=$env:Configuration  /p:RuntimeIdentifier=$env:RuntimeIdentifier
+      run: msbuild $env:Target_Solution_Path /t:Restore /p:Configuration=$env:Configuration /p:Platform=$env:Platform  /p:RuntimeIdentifier=$env:RuntimeIdentifier
       env:
         Configuration: ${{ matrix.configuration }}
-        RuntimeIdentifier: win-${{ matrix.targetplatform }}
+        Platform: ${{ matrix.platform }}
+        RuntimeIdentifier: win-${{ matrix.platform }}
 
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
