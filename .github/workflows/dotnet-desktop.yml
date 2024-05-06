@@ -120,14 +120,15 @@ jobs:
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
-      run: msbuild $env:Target_Solution_Path /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=$env:Artifacts_Root_Directory/GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.PFX_KEY }}
+      run: msbuild $env:Target_Solution_Path /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:AppxBundlePlatforms="$env:Appx_Bundle_Platforms" /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=$env:Artifacts_Root_Directory/GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.PFX_KEY }} /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true
       env:
-        Appx_Bundle: Always
-        Appx_Bundle_Platforms: x64 #x86|x64
+        Appx_Bundle: Never
+        Appx_Bundle_Platforms: x64
         Appx_Package_Build_Mode: SideloadOnly
+        Appx_Package_Dir: ${{ env.App_Packages_Directory }}       
         Configuration: ${{ matrix.configuration }}
         Platform: ${{ matrix.platform }}
-        RuntimeIdentifier: win-${{ matrix.platform }}        
+        RuntimeIdentifier: win-${{ matrix.platform }}
 
     # Remove the pfx
     - name: Remove the pfx
@@ -138,4 +139,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: MSIX Package
-        path: ${{ env.Artifacts_Root_Directory }}\AppPackages
+        path: ${{ env.App_Packages_Directory }}/**/*.msix
