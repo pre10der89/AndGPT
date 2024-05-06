@@ -104,9 +104,9 @@ jobs:
     # - name: Execute unit tests
     #  run: dotnet test
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    # Restore the application to populate the obj folder with RuntimeIdentifiers /p:RuntimeIdentifier=$env:RuntimeIdentifier
     - name: Restore the application
-      run: msbuild $env:Target_Solution_Path /t:Restore /p:Configuration=$env:Configuration /p:Platform=$env:Platform  /p:RuntimeIdentifier=$env:RuntimeIdentifier
+      run: msbuild $env:Target_Solution_Path /t:Restore /p:Configuration=$env:Configuration /p:Platform=$env:Platform  
       env:
         Configuration: ${{ matrix.configuration }}
         Platform: ${{ matrix.platform }}
