@@ -56,18 +56,19 @@ jobs:
     runs-on: windows-latest  # For a list of available runner types, refer to
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
+    # TODO: Figure out why we cannot build paths from other just declared ENVs
     env:
       Artifacts_Root_Directory:  ${{ github.workspace }}/Artifacts
       Src_Root_Directory:  ${{ github.workspace }}/src
       Apps_Root_Directory: ${{ github.workspace }}/src/apps
 
-      Target_Solution_Path: $env:Apps_Root_Directory/web/AndGPTWeb.sln
-      TargetApp_Project_Path: $env:Apps_Root_Directory/web/AndGPTWeb/AndGPTWeb.csproj
+      Target_Solution_Path: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln
+      TargetApp_Project_Path: ${{ github.workspace }}/src/apps/web/AndGPTWeb/AndGPTWeb.csproj
 
-      App_Packages_Directory: $env:Artifacts_Root_Directory/AppPackages
+      App_Packages_Directory: ${{ github.workspace }}/Artifacts/AppPackages
       App_Packages_Archive: AppPackages.zip      
-      Wap_Project_Directory: $env:Artifacts_Root_Directory
-      Wap_Project_Path: $env:TargetApp_Project_Path
+      Wap_Project_Directory: ${{ github.workspace }}/Artifacts
+      Wap_Project_Path: ${{ github.workspace }}/src/apps/web/AndGPTWeb/AndGPTWeb.csproj
 
     steps:
     - name: Checkout
