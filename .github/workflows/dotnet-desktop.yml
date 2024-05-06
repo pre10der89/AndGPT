@@ -57,16 +57,19 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
-      App_Packages_Directory: AppPackages
-      SigningCertificate: GitHubActionsDemo.pfx
-      #Solution_Name: ${{ github.workspace }}/src/apps/web/AndGPTWeb.sln
-      Solution_Name: $env:App_Root_Directory/AndGPTWeb.sln
+      Artifacts_Root_Directory:  ${{ github.workspace }}/Artifacts
+      Src_Root_Directory:  ${{ github.workspace }}/src
+      Apps_Root_Directory:  $env:Src_Root_Directory/apps
+
+
+      TargetApp_Solution_Directory: $env:Apps_Root_Directory/web
+      Solution_Name: $env:TargetApp_Solution_Directory/AndGPTWeb.sln
       # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
-      App_Root_Directory:   ${{ github.workspace }}/src/apps/web
+      App_Packages_Directory: $env:Artifacts_Root_Directory/AppPackages
       App_Packages_Archive: AppPackages.zip      
-      Wap_Project_Directory: Artifacts
-      Wap_Project_Path: $env:App_Root_Directory/AndGPT/AndGPTWeb.csproj
+      Wap_Project_Directory: $env:Artifacts_Root_Directory
+      Wap_Project_Path: $env:TargetApp_Solution_Directory/AndGPT/AndGPTWeb.csproj
 
     steps:
     - name: Checkout
@@ -88,7 +91,15 @@ jobs:
       run: |
           echo ${{ github.workspace }}
           echo $GITHUB_WORKSPACE
-          echo $env:Solution_Name
+          echo Artifacts_Root_Directory [$env:Artifacts_Root_Directory]
+          echo Src_Root_Directory [$env:Src_Root_Directory]
+          echo Apps_Root_Directory [$env:Apps_Root_Directory]
+          echo TargetApp_Solution_Directory [$env:TargetApp_Solution_Directory]
+          echo Solution_Name [$env:Solution_Name]
+          echo App_Packages_Directory [$env:App_Packages_Directory]
+          echo App_Packages_Archive [$env:App_Packages_Archive]
+          echo Wap_Project_Directory [$env:Wap_Project_Directory]
+          echo Wap_Project_Path [$env:Wap_Project_Path]
 
     # Execute all unit tests in the solution
     # - name: Execute unit tests
