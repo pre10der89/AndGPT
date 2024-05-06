@@ -114,13 +114,13 @@ jobs:
     # Decode the base 64 encoded pfx and save the Signing_Certificate
     - name: Decode the pfx
       run: |
-        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.Base64_Encoded_Pfx }}")
+        $pfx_cert_byte = [System.Convert]::FromBase64String("${{ secrets.BASE64_ENCODED_PFX }}")
         $certificatePath = Join-Path -Path $env:Artifacts_Root_Directory -ChildPath GitHubActionsWorkflow.pfx
         [IO.File]::WriteAllBytes("$certificatePath", $pfx_cert_byte)
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
-      run: msbuild $env:Target_Solution_Path /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=$env:Artifacts_Root_Directory/GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.Pfx_Key }}
+      run: msbuild $env:Target_Solution_Path /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:PackageCertificateKeyFile=$env:Artifacts_Root_Directory/GitHubActionsWorkflow.pfx /p:PackageCertificatePassword=${{ secrets.PFX_KEY }}
       env:
         Appx_Bundle: Always
         Appx_Bundle_Platforms: x64 #x86|x64
