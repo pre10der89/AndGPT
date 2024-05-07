@@ -95,7 +95,7 @@ jobs:
     # - name: Execute unit tests
     #  run: dotnet test
 
-    - name: Dotnet Restore
+    - name: Dotnet Restore 2
       run: dotnet restore $env:Target_Solution_Path
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers /p:RuntimeIdentifier=$env:RuntimeIdentifier
