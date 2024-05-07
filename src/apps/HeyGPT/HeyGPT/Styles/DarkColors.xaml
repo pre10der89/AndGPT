@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="OffWhite">#F9F9F9</Color>
+
+    <Color x:Key="DarkDarkGray">#171717</Color>
+    <Color x:Key="DarkGray">#212121</Color>
+    <Color x:Key="MediumDarkGray">#424242</Color>
+
+    <Color x:Key="Transparent">Transparent</Color>
+
+</ResourceDictionary>

@@ -1,0 +1,27 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--TODO: Something weird is happening here... If I do not include this TextBlock style then the
+              Text Box Style cannot find the StaticResources Microsoft Issue?-->
+    <Style x:Key="PageTitleStyle2" TargetType="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontWeight" Value="SemiLight" />
+        <Setter Property="FontSize" Value="{StaticResource LargeFontSize}" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="TextWrapping" Value="NoWrap" />
+        <Setter Property="Foreground" Value="{StaticResource DefaultTextColor}"/>
+    </Style>
+
+    <Style x:Key="PromptTextBoxStyle" TargetType="TextBox">
+        <Setter Property="Padding" Value="8,8,18,8"/>
+        <Setter Property="BorderThickness" Value="{StaticResource XXXSmallUniform}"/>
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="AcceptsReturn" Value="True" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="FontSize" Value="{StaticResource MediumFontSize}" />
+        <Setter Property="CornerRadius" Value="{StaticResource MediumCornerRadius}"/>
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+</ResourceDictionary>

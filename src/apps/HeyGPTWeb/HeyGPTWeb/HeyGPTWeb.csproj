@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>$(NetCoreAppCurrent)-$(WindowsTargetPlatformCurrent)</TargetFramework>
+		<TargetPlatformMinVersion>$(WindowsTargetPlatformVersionMinimum)</TargetPlatformMinVersion>
+		<RootNamespace>HeyGPTWeb.App</RootNamespace>
+		<ApplicationIcon>Assets/WindowIcon.ico</ApplicationIcon>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<RuntimeIdentifiers>$(RuntimeIdentifiersCurrent)</RuntimeIdentifiers>
+		<PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
+		<UseWinUI>true</UseWinUI>
+		<EnableMsixTooling>true</EnableMsixTooling>
+		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<UseCommonOutputDirectory>false</UseCommonOutputDirectory>
+		<OutputPath>$(AppsOutputDirectory)</OutputPath>
+		<OutDir>$(OutputPath)</OutDir>
+		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>10282762E487556703D2D4CC175A92627D4F3BF4</PackageCertificateThumbprint>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Manifest Include="$(ApplicationManifest)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" />
+		<PackageReference Include="Microsoft.WindowsAppSDK" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" />
+		<PackageReference Include="WinUIEx" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\AndGPT.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.UI.Core\AndGPT.UI.Core.csproj" />
+		<ProjectReference Include="..\HeyGPTWeb.Core\HeyGPTWeb.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="Assets\WindowIcon.ico">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+		<ProjectCapability Include="Msix" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
+		<HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
+	</PropertyGroup>
+</Project>

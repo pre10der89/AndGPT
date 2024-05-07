@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "HeyGPTWeb (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "HeyGPTWeb (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
