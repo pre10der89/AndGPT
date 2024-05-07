@@ -43,5 +43,6 @@
 		<Platforms>$(PlatformsCurrent)</Platforms>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<DefaultItemExcludes>$(DefaultItemExcludes);**/bin/**;**/obj/**;**/*.bak;**/packages.lock.json</DefaultItemExcludes>
 	</PropertyGroup>
 </Project>

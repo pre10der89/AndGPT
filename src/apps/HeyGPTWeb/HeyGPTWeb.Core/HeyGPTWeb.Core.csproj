@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
+		<RootNamespace>HeyGPTWeb.Core</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Contracts\Services\" />
+	  <Folder Include="Helpers\" />
+	  <Folder Include="Services\" />
+	</ItemGroup>
+</Project>

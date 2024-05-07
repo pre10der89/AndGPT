@@ -14,14 +14,15 @@
         -->
   <ItemGroup>
     <!--Microsoft (NuGet)-->
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <!--Presentation (NuGet)-->
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240428000" />
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
-    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-    <PackageVersion Include="WinUIEx" Version="2.3.4" />
+    <PackageVersion Include="WinUIEx" Version="2.3.2" />
     <!--Third-Party (NuGet)-->
     <PackageVersion Include="FluentValidation" Version="11.9.0" />
     <PackageVersion Include="FluentAssertions" Version="6.12.0" />
