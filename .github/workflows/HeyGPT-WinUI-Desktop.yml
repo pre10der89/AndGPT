@@ -140,13 +140,13 @@ jobs:
     - name: Upload [HeyGPTWeb] build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: HeyGPTWeb.App
-        path: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPTWeb.App/**/*
+        name: HeyGPTWeb
+        path: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPTWeb/**/*
         retention-days: 5
 
-    - name: Upload [HeyGPT.App] build artifacts
+    - name: Upload [HeyGPT] build artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: HeyGPT.App
-        path: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT.App/**/*
+        name: HeyGPT
+        path: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT/**/*
         retention-days: 5
