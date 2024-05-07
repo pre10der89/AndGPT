@@ -26,6 +26,7 @@
 
 		<LibsOutputDirectory>$([MSBuild]::NormalizeDirectory('$(ArtifactsOutputDirectory)', 'libs', $(MSBuildProjectName)))</LibsOutputDirectory>
 		<AppsOutputDirectory>$([MSBuild]::NormalizeDirectory('$(ArtifactsOutputDirectory)', 'apps', '$(MSBuildProjectName)'))</AppsOutputDirectory>
+		<TestsOutputDirectory>$([MSBuild]::NormalizeDirectory('$(ArtifactsOutputDirectory)', 'tests', '$(MSBuildProjectName)'))</TestsOutputDirectory>
 	</PropertyGroup>
 
 	<PropertyGroup Label="Standard MSBuild Output Path Overrides">

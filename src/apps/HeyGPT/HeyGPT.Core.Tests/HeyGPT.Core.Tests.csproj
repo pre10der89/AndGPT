@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
+		<RootNamespace>HeyGPT.Core.Tests</RootNamespace>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<UseCommonOutputDirectory>false</UseCommonOutputDirectory>
+		<OutputPath>$(TestsOutputDirectory)</OutputPath>
+		<OutDir>$(OutputPath)</OutDir>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AnalysisMode>None</AnalysisMode>
+		<AnalysisModeGlobalization>None</AnalysisModeGlobalization>
+		<AnalysisModeSecurity>None</AnalysisModeSecurity>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+
+		<PackageReference Include="NUnit">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+
+		<PackageReference Include="NUnit3TestAdapter">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+
+		<PackageReference Include="FluentAssertions">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+
+		<PackageReference Include="FluentAssertions.Analyzers">
+			<TreatAsUsed>true</TreatAsUsed>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\HeyGPT.Core\HeyGPT.Core.csproj" />
+	</ItemGroup>
+  
+</Project>
