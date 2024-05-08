@@ -186,4 +186,16 @@
   <data name="Chat_Prompt_Text_Box.PlaceholderText" xml:space="preserve">
     <value>Message HeyGPT</value>
   </data>
+  <data name="Community_Member_Name_Magician" xml:space="preserve">
+    <value>Magician</value>
+  </data>
+  <data name="Community_Member_Name_Pirate" xml:space="preserve">
+    <value>Pirate</value>
+  </data>
+  <data name="Community_Member_Name_TightRopeWalker" xml:space="preserve">
+    <value>Tight Rope Walker</value>
+  </data>
+  <data name="LetsChat_Enter_Message_TextBoxPlaceholder_Format_Text" xml:space="preserve">
+    <value>Ask the {0}</value>
+  </data>
 </root>

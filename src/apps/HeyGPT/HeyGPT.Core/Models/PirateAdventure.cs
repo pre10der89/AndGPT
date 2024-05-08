@@ -2,6 +2,37 @@
 
 public class PirateAdventure
 {
+    public class PirateTranslator
+    {
+        private static Dictionary<string, string> PirateDictionary = new Dictionary<string, string>()
+        {
+            {"hello", "ahoy"},
+            {"my", "me"},
+            {"friend", "matey"},
+            {"is", "be"},
+            {"I", "I be"},
+            {"am", "be"},
+            {"the", "th'"},
+            {"you", "ye"}
+        };
+
+        public static string ToPirateSpeak(string sentence)
+        {
+            string[] words = sentence.Split(' ');
+            for (int i = 0; i < words.Length; i++)
+            {
+                string word = words[i].ToLower();
+                if (PirateDictionary.ContainsKey(word))
+                {
+                    words[i] = PirateDictionary[word];
+                }
+            }
+            string pirateSpeak = string.Join(" ", words);
+
+            return pirateSpeak + ", Arr!";
+        }
+    }
+
     public static void GenerateTreasureMap(int seed)
     {
         var random = new Random(seed);

@@ -43,6 +43,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Update="Assets\SplashScreen.scale-200.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Content Update="Assets\Wide310x150Logo.scale-200.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>

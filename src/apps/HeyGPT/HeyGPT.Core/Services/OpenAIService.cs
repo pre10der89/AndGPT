@@ -52,13 +52,47 @@ public class OpenAIService : IOpenAIService
         await Task.CompletedTask;
     }
 
-    public async Task<ChatCompletionResponse> SendRealCompletion()
+    public async Task<ChatCompletionResponse> SendRealCompletion(CommunityMember communityMember, string message)
     {
         _openAIClient ??= new OpenAIClient(_secretKey.Value);
 
         var chatCompletionsOptions = new ChatCompletionsOptions()
         {
-            DeploymentName = "gpt-3.5-turbo", // Use DeploymentName for "model" with non-Azure clients
+            DeploymentName = "gpt-3.5-turbo", //"gpt-4", // Use DeploymentName for "model" with non-Azure clients
+            Messages =
+            {
+                // The system message represents instructions or other guidance about how the assistant should behave
+                new ChatRequestSystemMessage($"You are a helpful assistant. You are a {communityMember.CommunityRole.Value}"),
+                // new ChatRequestUserMessage("Can you help me?")
+            }
+        };
+
+        if (communityMember.Pithy)
+        {
+            chatCompletionsOptions.Messages.Add(new ChatRequestSystemMessage("Be pithy in your answer, I'm paying for this!"));
+        }
+
+        foreach (var prompt in communityMember.CharacterPrompts)
+        {
+            chatCompletionsOptions.Messages.Add(new ChatRequestSystemMessage(prompt));
+        }
+
+        chatCompletionsOptions.Messages.Add(new ChatRequestUserMessage(message));
+
+        chatCompletionsOptions.Temperature = (float)communityMember.Temperature;
+
+        var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
+
+        return response.GetCompletionResponse(communityMember.CommunityRole);
+    }
+
+    public async Task<ChatCompletionResponse> SendRealCompletion2(CommunityMember communityMember, string message)
+    {
+        _openAIClient ??= new OpenAIClient(_secretKey.Value);
+
+        var chatCompletionsOptions = new ChatCompletionsOptions()
+        {
+            DeploymentName = "gpt-3.5-turbo", //"gpt-4", // Use DeploymentName for "model" with non-Azure clients
             Messages =
             {
                 // The system message represents instructions or other guidance about how the assistant should behave
@@ -70,7 +104,8 @@ public class OpenAIService : IOpenAIService
                 //new ChatRequestAssistantMessage("Arrrr! Of course, me hearty! What can I do for ye?"),
                 //new ChatRequestUserMessage("What's the best way to train a parrot?"),
                 //new ChatRequestUserMessage("Can you write me a C# method only a pirate would love?"),
-                new ChatRequestUserMessage("Can you create me a table of pirate booty?"),
+                //new ChatRequestUserMessage("Can you create me a table of pirate booty?"),
+                new ChatRequestUserMessage(message),
             }
         };
 
@@ -99,6 +134,7 @@ public class OpenAIService : IOpenAIService
                 //new ChatRequestAssistantMessage("Arrrr! Of course, me hearty! What can I do for ye?"),
                 //new ChatRequestUserMessage("What's the best way to train a parrot?"),
                 new ChatRequestUserMessage("Can you write me a C# method only a pirate would love?"),
+                new ChatRequestUserMessage("Can you create me a table of pirate booty?"),
             }
         };
 

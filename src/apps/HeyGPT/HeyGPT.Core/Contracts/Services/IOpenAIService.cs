@@ -6,7 +6,7 @@ public interface IOpenAIService
 {
     Task InitializeAsync();
 
-    Task<ChatCompletionResponse> SendRealCompletion();
+    Task<ChatCompletionResponse> SendRealCompletion(CommunityMember communityMember, string message);
 
     Task<ChatCompletionResponse> SendTestCompletion();
 }

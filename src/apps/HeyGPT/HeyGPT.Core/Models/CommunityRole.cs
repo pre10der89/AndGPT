@@ -20,11 +20,11 @@ public readonly record struct CommunityRole
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentNullException(nameof(value), "The numeric token id cannot be null");
+            throw new ArgumentNullException(nameof(value), "The value cannot be null");
         }
 
         // Strip all whitespace
-        Value = value.Trim();
+        Value = value.ToLowerInvariant().Trim();
     }
 
 

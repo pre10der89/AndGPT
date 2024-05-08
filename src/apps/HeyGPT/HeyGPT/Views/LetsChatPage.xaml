@@ -8,6 +8,8 @@
     xmlns:viewModels="using:HeyGPT.App.ViewModels"
     xmlns:selectors="using:HeyGPT.App.Selectors"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -39,7 +41,7 @@
             </RichTextBlock>-->
             <controls:MarkdownTextBlock Text="{x:Bind Message}" FontSize="18" FontFamily="Arial Narrow" Foreground="SkyBlue" Background="Transparent" CodeMargin="0, 15, 0, 15"/>
         </DataTemplate>
-        
+
         <DataTemplate x:Key="OtherCommunityMemberTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
             <RichTextBlock TextWrapping="Wrap">
                 <Paragraph>
@@ -116,6 +118,67 @@
             <Setter Property="Margin" Value="0,10,0,10"/>
         </Style>
 
+        <Style x:Key="ListViewItemStyleSelected" TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="{ThemeResource ListViewItemBackground}" />
+            <Setter Property="Foreground" Value="{ThemeResource ListViewItemForeground}" />
+            <Setter Property="TabNavigation" Value="Local" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="Padding" Value="12,0,12,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="2,2,2,2"/>
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
+            <Setter Property="AllowDrop" Value="False" />
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="FocusVisualMargin" Value="0" />
+            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ListViewItemFocusVisualPrimaryBrush}" />
+            <Setter Property="FocusVisualPrimaryThickness" Value="2" />
+            <Setter Property="FocusVisualSecondaryBrush" Value="{ThemeResource ListViewItemFocusVisualSecondaryBrush}" />
+            <Setter Property="FocusVisualSecondaryThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter ContentTransitions="{TemplateBinding ContentTransitions}" 
+             Control.IsTemplateFocusTarget="True" 
+             FocusVisualMargin="{TemplateBinding FocusVisualMargin}" 
+             FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}" 
+             FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}" 
+             FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}" 
+             FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}" 
+             SelectionCheckMarkVisualEnabled="{ThemeResource ListViewItemSelectionCheckMarkVisualEnabled}" 
+             CheckBrush="{ThemeResource ListViewItemCheckBrush}" 
+             CheckBoxBrush="{ThemeResource ListViewItemCheckBoxBrush}" 
+             DragBackground="{ThemeResource ListViewItemDragBackground}" 
+             DragForeground="{ThemeResource ListViewItemDragForeground}" 
+             FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}" 
+             FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}" 
+             PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}" 
+             PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}"
+             PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}" 
+             SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
+             SelectedForeground="{ThemeResource ListViewItemForegroundSelected}" 
+             SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}"
+             PressedBackground="{ThemeResource ListViewItemBackgroundPressed}" 
+             SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}" 
+             DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" 
+             DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" 
+             ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" 
+             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+             ContentMargin="{TemplateBinding Padding}" 
+             CheckMode="{ThemeResource ListViewItemCheckMode}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ListViewItemStyleCommunityMembers" TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyleSelected}">
+            <Setter Property="Margin" Value="0,5,0,5"/>
+        </Style>
+
     </Page.Resources>
 
 
@@ -125,41 +188,79 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+
         <views:HeaderWorkspaceControl Grid.Row="0" VerticalAlignment="Top"/>
 
-        <Grid Grid.Row="1" Margin="0, 10, 0, 0 ">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".25*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width=".25*"/>
+            </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Row="0" HorizontalAlignment="Stretch" VerticalScrollMode="Enabled" IsTabStop="True">
-                <Grid  Width="700" HorizontalAlignment="Center">
-                    <ListView
-                        ItemsSource="{x:Bind ViewModel.MessageCollection, Mode=OneWay}"
-                        ItemTemplateSelector="{StaticResource ChatMessageTemplateSelector}"
-                        ItemContainerStyle="{StaticResource ListViewItemStyleChatHistory}">
-                        <!--<ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Margin" Value="0,10,0,10"/>
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>-->
-                    </ListView>
-                </Grid>
-            </ScrollViewer>
-
-            <Grid Grid.Row="1" HorizontalAlignment="Center" Width="700" Margin="0, 10, 0, 0 ">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="500"/>
-                    <ColumnDefinition Width="5"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox x:Uid="Chat_Prompt_Text_Box" Grid.Column="0" MaxHeight="120" Style="{StaticResource PromptTextBoxStyle}"/>
-                <Button Grid.Column="2" Width="35" Height="50" VerticalAlignment="Bottom" Style="{StaticResource SimpleGlyphButtonStyle}" Content="&#xE110;"
-                        Command="{x:Bind ViewModel.SendMessageCommand, Mode=OneWay}"/>
+            <Grid Grid.Column="0">
+                <ListView
+                x:Name="CommunityMemberListViewControl"
+                MaxWidth="300"
+                SelectionMode="Single"
+                SelectedItem="{x:Bind ViewModel.SelectedCommunityMember, Mode=TwoWay}"
+                IsItemClickEnabled="True"
+                ItemsSource="{x:Bind ViewModel.CommunityMemberCollection, Mode=OneWay}"
+                ItemContainerStyle="{StaticResource ListViewItemStyleCommunityMembers}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:CommunityMemberViewModel">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{x:Bind RoleIcon, Mode=OneWay}" VerticalAlignment="Center"
+                                       Width="44" 
+                                       Height="44"
+                                       Stretch="Uniform"/>
+                                <TextBlock Margin="15, 0, 0, 0" Text="{x:Bind RoleDisplayName, Mode=OneWay}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding ElementName=CommunityMemberListViewControl}">
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.CommunityMemberSelectedCommand}"/>
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </ListView>
             </Grid>
+
+            <Grid Grid.Column="1" Margin="0, 10, 0, 0 ">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer Grid.Row="0" HorizontalAlignment="Stretch" VerticalScrollMode="Enabled" IsTabStop="True">
+                    <Grid  Width="700" HorizontalAlignment="Center">
+                        <ListView
+                            ItemsSource="{x:Bind ViewModel.MessageCollection, Mode=OneWay}"
+                            ItemTemplateSelector="{StaticResource ChatMessageTemplateSelector}"
+                            ItemContainerStyle="{StaticResource ListViewItemStyleChatHistory}"/>
+                    </Grid>
+                </ScrollViewer>
+
+                <Grid Grid.Row="1" HorizontalAlignment="Center" Width="700" Margin="0, 10, 0, 0 ">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="500"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        x:Uid="Chat_Prompt_Text_Box"
+                        Grid.Column="0"
+                        MaxHeight="120"
+                        Style="{StaticResource PromptTextBoxStyle}"
+                        PlaceholderText="{x:Bind ViewModel.MessagePlaceholder, Mode=OneWay}"
+                        Text="{x:Bind ViewModel.UserMessage, Mode=TwoWay}"/>
+                    <Button Grid.Column="2" Width="35" Height="50" VerticalAlignment="Bottom" Style="{StaticResource SimpleGlyphButtonStyle}" Content="&#xE110;"
+                        Command="{x:Bind ViewModel.SendMessageCommand, Mode=OneWay}"/>
+                </Grid>
+            </Grid>
+
         </Grid>
 
         <views:FooterWorkspaceControl Grid.Row="2" Margin="0, 10, 0, 0" VerticalAlignment="Bottom"/>
