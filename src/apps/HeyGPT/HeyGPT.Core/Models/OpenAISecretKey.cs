@@ -30,21 +30,23 @@ public sealed record OpenAISecretKey
         ObfuscateValue = ObfuscateString(Value);
     }
 
+
     /// <summary>
     /// Extract the string representation of the specified <see cref="OpenAISecretKey"/>.
     /// </summary>
-    /// <param name="value">The <see cref="OpenAISecretKey"/> object from which the string representation will be extracted.</param>
-    public static implicit operator string(OpenAISecretKey value)
+    /// <param name="_">The <see cref="OpenAISecretKey"/> object from which the string representation will be extracted.</param>
+    public static implicit operator string(OpenAISecretKey _)
     {
-        ArgumentNullException.ThrowIfNull(value);
+        // TODO: We probably don't want the implicit operator to be used since this has very sensitive information and a simple assumption could
+        // cause its use and expose the Message.  We are trying to force all to go through the "Message" property.  Is there better ways to protect this value?
 
-        return value.Value;
+        throw new InvalidOperationException("Implicit casting of this type is not allowed.  Use the 'Message' property directly");
     }
 
     /// <summary>
     /// Construct a <see cref="OpenAISecretKey"/> from the specified string value.
     /// </summary>
-    /// <param name="value">The string value that represents a zipcode.</param>
+    /// <param name="value">The string value that represents the object.</param>
     public static explicit operator OpenAISecretKey(string value) => new(value);
 
     public override string ToString() => ObfuscateValue;

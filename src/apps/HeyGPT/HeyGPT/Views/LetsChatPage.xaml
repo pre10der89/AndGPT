@@ -5,7 +5,119 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:HeyGPT.App.Views"
+    xmlns:viewModels="using:HeyGPT.App.ViewModels"
+    xmlns:selectors="using:HeyGPT.App.Selectors"
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <DataTemplate x:Key="PirateTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <!--<RichTextBlock TextWrapping="Wrap">
+                <Paragraph>
+                    <Run Foreground="Red" Text="{x:Bind Message}"/>
+                </Paragraph>
+            </RichTextBlock>-->
+
+            <controls:MarkdownTextBlock Text="{x:Bind Message}" FontFamily="Segoe Script"  Background="Transparent" CodeMargin="0, 15, 0, 15"/>
+
+        </DataTemplate>
+        <DataTemplate x:Key="MagicianTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <!--<RichTextBlock TextWrapping="Wrap">
+                <Paragraph>
+                    <Run Foreground="Blue" Text="{x:Bind Message}"/>
+                </Paragraph>
+            </RichTextBlock>-->
+
+            <controls:MarkdownTextBlock Text="{x:Bind Message}" FontSize="18" FontFamily="Papyrus" Foreground="Gold" Background="Transparent" CodeMargin="0, 15, 0, 15"/>
+
+        </DataTemplate>
+        <DataTemplate x:Key="TightRopeWalkerTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <!--<RichTextBlock TextWrapping="Wrap">
+                <Paragraph>
+                    <Run Foreground="Green" Text="{x:Bind Message}"/>
+                </Paragraph>
+            </RichTextBlock>-->
+            <controls:MarkdownTextBlock Text="{x:Bind Message}" FontSize="18" FontFamily="Arial Narrow" Foreground="SkyBlue" Background="Transparent" CodeMargin="0, 15, 0, 15"/>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="OtherCommunityMemberTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <RichTextBlock TextWrapping="Wrap">
+                <Paragraph>
+                    <Run Foreground="Yellow" Text="{x:Bind Message}"/>
+                </Paragraph>
+            </RichTextBlock>
+        </DataTemplate>
+
+        <selectors:ChatMessageTemplateSelector x:Key="ChatMessageTemplateSelector"
+                                           PirateTemplate="{StaticResource PirateTemplate}"
+                                           MagicianTemplate="{StaticResource MagicianTemplate}"
+                                           TightRopeWalkerTemplate="{StaticResource TightRopeWalkerTemplate}"
+                                           OtherCommunityMemberTemplate="{StaticResource OtherCommunityMemberTemplate}"/>
+
+
+        <!--PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}"-->
+        <Style x:Key="ListViewItemStyleNoPointerOver" TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+            <Setter Property="Background" Value="{ThemeResource ListViewItemBackground}" />
+            <Setter Property="Foreground" Value="{ThemeResource ListViewItemForeground}" />
+            <Setter Property="TabNavigation" Value="Local" />
+            <Setter Property="IsHoldingEnabled" Value="True" />
+            <Setter Property="Padding" Value="12,0,12,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
+            <Setter Property="AllowDrop" Value="False" />
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="FocusVisualMargin" Value="0" />
+            <Setter Property="FocusVisualPrimaryBrush" Value="{ThemeResource ListViewItemFocusVisualPrimaryBrush}" />
+            <Setter Property="FocusVisualPrimaryThickness" Value="2" />
+            <Setter Property="FocusVisualSecondaryBrush" Value="{ThemeResource ListViewItemFocusVisualSecondaryBrush}" />
+            <Setter Property="FocusVisualSecondaryThickness" Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter ContentTransitions="{TemplateBinding ContentTransitions}" 
+                     Control.IsTemplateFocusTarget="True" 
+                     FocusVisualMargin="{TemplateBinding FocusVisualMargin}" 
+                     FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}" 
+                     FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}" 
+                     FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}" 
+                     FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}" 
+                     SelectionCheckMarkVisualEnabled="{ThemeResource ListViewItemSelectionCheckMarkVisualEnabled}" 
+                     CheckBrush="{ThemeResource ListViewItemCheckBrush}" 
+                     CheckBoxBrush="{ThemeResource ListViewItemCheckBoxBrush}" 
+                     DragBackground="{ThemeResource ListViewItemDragBackground}" 
+                     DragForeground="{ThemeResource ListViewItemDragForeground}" 
+                     FocusBorderBrush="{ThemeResource ListViewItemFocusBorderBrush}" 
+                     FocusSecondaryBorderBrush="{ThemeResource ListViewItemFocusSecondaryBorderBrush}" 
+                     PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackground}" 
+                     PointerOverBackground="Transparent" 
+                     PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}" 
+                     SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}" 
+                     SelectedForeground="{ThemeResource ListViewItemForegroundSelected}" 
+                     SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}" 
+                     PressedBackground="{ThemeResource ListViewItemBackgroundPressed}" 
+                     SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}" 
+                     DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" 
+                     DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" 
+                     ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" 
+                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                     ContentMargin="{TemplateBinding Padding}" 
+                     CheckMode="{ThemeResource ListViewItemCheckMode}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ListViewItemStyleChatHistory" TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyleNoPointerOver}">
+            <Setter Property="Margin" Value="0,10,0,10"/>
+        </Style>
+
+    </Page.Resources>
+
 
     <Grid x:Name="ContentArea">
         <Grid.RowDefinitions>
@@ -23,33 +135,17 @@
 
             <ScrollViewer Grid.Row="0" HorizontalAlignment="Stretch" VerticalScrollMode="Enabled" IsTabStop="True">
                 <Grid  Width="700" HorizontalAlignment="Center">
-                    <ListView>
-                        <ListViewItem Content="A"/>
-                        <ListViewItem Content="B"/>
-                        <ListViewItem Content="C"/>
-                        <ListViewItem Content="D"/>
-                        <ListViewItem Content="E"/>
-                        <ListViewItem Content="F"/>
-                        <ListViewItem Content="G"/>
-                        <ListViewItem Content="H"/>
-                        <ListViewItem Content="I"/>
-                        <ListViewItem Content="J"/>
-                        <ListViewItem Content="K"/>
-                        <ListViewItem Content="L"/>
-                        <ListViewItem Content="M"/>
-                        <ListViewItem Content="N"/>
-                        <ListViewItem Content="O"/>
-                        <ListViewItem Content="P"/>
-                        <ListViewItem Content="Q"/>
-                        <ListViewItem Content="R"/>
-                        <ListViewItem Content="S"/>
-                        <ListViewItem Content="T"/>
-                        <ListViewItem Content="U"/>
-                        <ListViewItem Content="V"/>
-                        <ListViewItem Content="W"/>
-                        <ListViewItem Content="X"/>
-                        <ListViewItem Content="Y"/>
-                        <ListViewItem Content="Zed"/>
+                    <ListView
+                        ItemsSource="{x:Bind ViewModel.MessageCollection, Mode=OneWay}"
+                        ItemTemplateSelector="{StaticResource ChatMessageTemplateSelector}"
+                        ItemContainerStyle="{StaticResource ListViewItemStyleChatHistory}">
+                        <!--<ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Margin" Value="0,10,0,10"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>-->
                     </ListView>
                 </Grid>
             </ScrollViewer>
@@ -61,7 +157,8 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBox x:Uid="Chat_Prompt_Text_Box" Grid.Column="0" MaxHeight="120" Style="{StaticResource PromptTextBoxStyle}"/>
-                <Button Grid.Column="2" Width="35" Height="50" VerticalAlignment="Bottom" Style="{StaticResource SimpleGlyphButtonStyle}" Content="&#xE110;"/>
+                <Button Grid.Column="2" Width="35" Height="50" VerticalAlignment="Bottom" Style="{StaticResource SimpleGlyphButtonStyle}" Content="&#xE110;"
+                        Command="{x:Bind ViewModel.SendMessageCommand, Mode=OneWay}"/>
             </Grid>
         </Grid>
 
