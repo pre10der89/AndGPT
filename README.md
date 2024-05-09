@@ -32,6 +32,6 @@ HeyGPT:
 
 This app uses the Azure OpenAI API, which requires an API key from OpenAI.  The app requires that a valid API key be located at the following Environment Variable:
 
-HeyGPTApiKey
+HeyGPTKey="<apikey>"
 
 Beware that this app will make requests to OpenAI resulting in token usage that may cost money. 
