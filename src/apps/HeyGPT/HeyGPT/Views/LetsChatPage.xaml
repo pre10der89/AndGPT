@@ -200,7 +200,7 @@
 
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <ListView
@@ -230,14 +230,14 @@
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                 </ListView>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" Margin="0, 30, 0, 0" VerticalAlignment="Bottom">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBox PlaceholderText="Enter Text for Clipboard"/>
-                    <ToggleButton Grid.Row="1" Content="Monitor Clipboard" IsChecked="{x:Bind ViewModel.IsMonitoringClipboard, Mode=TwoWay}" Command="{x:Bind ViewModel.ToggleMonitoringClipboardCommand, Mode=OneWay}"/>
+                    <TextBox PlaceholderText="Scratch Pad"  Height="120" Style="{StaticResource PromptTextBoxStyle}"/>
+                    <ToggleButton Grid.Row="1" Margin="0, 5, 0, 0" HorizontalAlignment="Stretch" Content="Monitor Clipboard" IsChecked="{x:Bind ViewModel.IsMonitoringClipboard, Mode=TwoWay}" Command="{x:Bind ViewModel.ToggleMonitoringClipboardCommand, Mode=OneWay}"/>
                 </Grid>
             </Grid>
 
@@ -258,7 +258,7 @@
 
                 <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500" Margin="0, 10, 0, 0 ">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" MinWidth="500"/>
+                        <ColumnDefinition Width="*" MinWidth="300"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
