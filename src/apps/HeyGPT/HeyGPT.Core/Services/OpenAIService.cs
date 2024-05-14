@@ -52,7 +52,7 @@ public class OpenAIService : IOpenAIService
         await Task.CompletedTask;
     }
 
-    public async Task<ChatCompletionResponse> SendRealCompletion(CommunityMember communityMember, string message)
+    public async Task<ChatCompletionResponse> SendRealCompletion(CommunityMember communityMember, string message, string extraContext = "")
     {
         _openAIClient ??= new OpenAIClient(_secretKey.Value);
 
@@ -79,13 +79,17 @@ public class OpenAIService : IOpenAIService
 
         chatCompletionsOptions.Messages.Add(new ChatRequestUserMessage(message));
 
+        if (!string.IsNullOrEmpty(extraContext))
+        {
+            chatCompletionsOptions.Messages.Add(new ChatRequestUserMessage(extraContext));
+        }
+
         chatCompletionsOptions.Temperature = (float)communityMember.Temperature;
 
         var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
 
         return response.GetCompletionResponse(communityMember.CommunityRole);
     }
-
     public async Task<ChatCompletionResponse> SendRealCompletion2(CommunityMember communityMember, string message)
     {
         _openAIClient ??= new OpenAIClient(_secretKey.Value);

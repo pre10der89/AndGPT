@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HeyGPT.Core.Contracts.Services;
 using HeyGPT.Core.Models;
+using Windows.ApplicationModel.DataTransfer;
 
 namespace HeyGPT.App.ViewModels;
 
@@ -13,6 +14,9 @@ public partial class LetsChatViewModel : ObservableRecipient
     private readonly IOpenAIService _openAIService;
 
     private CommunityMember _currentCommunityMember;
+
+    private bool _sendClipboardContentWithNextCompletion;
+    private string _lastClipboardContent;
 
     public LetsChatViewModel(IOpenAIService openAIService)
     {
@@ -34,6 +38,9 @@ public partial class LetsChatViewModel : ObservableRecipient
 
     [ObservableProperty]
     private CommunityMemberViewModel? _selectedCommunityMember;
+
+    [ObservableProperty] 
+    private bool _isMonitoringClipboard;
 
     public ObservableCollection<CommunityMemberViewModel> CommunityMemberCollection { get; private set; } = [];
 
@@ -84,7 +91,17 @@ public partial class LetsChatViewModel : ObservableRecipient
         }
 
         //var result = await _openAIService.SendTestCompletion().ConfigureAwait(true);
-        var result = await _openAIService.SendRealCompletion(_currentCommunityMember, userMessage).ConfigureAwait(true);
+        var extraContext = string.Empty;
+        if (_sendClipboardContentWithNextCompletion)
+        {
+            extraContext = _lastClipboardContent ?? string.Empty;
+            _lastClipboardContent = string.Empty;
+            _sendClipboardContentWithNextCompletion = false;
+        }
+
+
+
+        var result = await _openAIService.SendRealCompletion(_currentCommunityMember, userMessage, extraContext).ConfigureAwait(true);
 
         var message = $"{result.Content} [{result.MetaData.Usage.TotalTokens}]";
 
@@ -195,6 +212,32 @@ public partial class LetsChatViewModel : ObservableRecipient
 
     #endregion
 
+    #region ToggleMonitoringClipboardCommand
+
+    private RelayCommand? _toggleMonitoringClipboardCommand;
+
+    public ICommand ToggleMonitoringClipboardCommand => _toggleMonitoringClipboardCommand ??= new RelayCommand(OnExecuteToggleMonitoringClipboardCommand, OnCanExecuteToggleMonitoringClipboardCommand);
+
+    private bool OnCanExecuteToggleMonitoringClipboardCommand()
+    {
+        return true;
+    }
+
+    private void OnExecuteToggleMonitoringClipboardCommand()
+    {
+        if (IsMonitoringClipboard)
+        {
+            Clipboard.ContentChanged += OnClipboardContentChanged;
+
+        }
+        else
+        {
+            Clipboard.ContentChanged -= OnClipboardContentChanged;
+        }
+    }
+
+    #endregion
+
     #endregion
 
     #endregion
@@ -217,4 +260,15 @@ public partial class LetsChatViewModel : ObservableRecipient
 
         MessagePlaceholder = string.Format(formatString, roleDisplayName);
     }
-}
+
+    private async void OnClipboardContentChanged(object sender, object e)
+    {
+        DataPackageView dataPackageView = Clipboard.GetContent();
+        if (dataPackageView.Contains(StandardDataFormats.Text))
+        {
+            _lastClipboardContent = await dataPackageView.GetTextAsync();
+            _sendClipboardContentWithNextCompletion = true;
+        }
+    }
+
+    }
