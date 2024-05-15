@@ -22,7 +22,7 @@ public sealed record OpenAISecretKey
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            throw new ArgumentNullException(nameof(value), "The numeric token id cannot be null");
+            throw new ArgumentNullException(nameof(value), "The Open AI Key cannot be null");
         }
 
         // Strip all whitespace

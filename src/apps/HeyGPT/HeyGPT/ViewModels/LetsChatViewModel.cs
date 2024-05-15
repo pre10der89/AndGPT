@@ -4,26 +4,27 @@ using AndGPT.UI.Core.Helpers;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HeyGPT.Core.Contracts.Services;
+using HeyGPT.App.Contracts.Services;
 using HeyGPT.Core.Models;
-using Windows.ApplicationModel.DataTransfer;
+using WinUIEx.Messaging;
+using Windows.Networking.NetworkOperators;
 
 namespace HeyGPT.App.ViewModels;
 
 public partial class LetsChatViewModel : ObservableRecipient
 {
     private readonly IOpenAIService _openAIService;
+    private readonly ICharacterService _characterService;
+    private readonly IClipboardContextService _clipboardContextService;
 
-    private CommunityMember _currentCommunityMember;
-
-    private bool _sendClipboardContentWithNextCompletion;
-    private string _lastClipboardContent;
-
-    public LetsChatViewModel(IOpenAIService openAIService)
+    public LetsChatViewModel(IOpenAIService openAIService, ICharacterService characterService, IClipboardContextService clipboardContextService)
     {
         _openAIService = openAIService;
-        _openAIService.InitializeAsync();
+        _characterService = characterService;
+        _clipboardContextService = clipboardContextService;
+        _openAIService.LoginAsync();
 
-        LoadCommunityMembers();
+        LoadCharacters();
     }
 
     #region ILetsChatViewModel
@@ -37,34 +38,14 @@ public partial class LetsChatViewModel : ObservableRecipient
     private string? _messagePlaceholder;
 
     [ObservableProperty]
-    private CommunityMemberViewModel? _selectedCommunityMember;
+    private ChatCharacterViewModel? _selectedChatCharacter;
 
-    [ObservableProperty] 
-    private bool _isMonitoringClipboard;
+    [ObservableProperty]
+    private bool _shouldIncludeClipboardContext;
 
-    public ObservableCollection<CommunityMemberViewModel> CommunityMemberCollection { get; private set; } = [];
+    public ObservableCollection<ChatCharacterViewModel> ChatCharacterCollection { get; private set; } = [];
 
-    public ObservableCollection<ChatMessageReceivedViewModel> MessageCollection
-    {
-        get;
-    } = [
-
-    //new ChatMessageReceivedViewModel
-    //{
-    //    CommunityRole = new CommunityRole("Pirate"),
-    //    Message = "I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate, I'm a pirate"
-    //},
-    //new ChatMessageReceivedViewModel
-    //{
-    //    CommunityRole = new CommunityRole("magician"),
-    //    Message = "I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician, I'm a magician"
-    //},
-    //new ChatMessageReceivedViewModel
-    //{
-    //    CommunityRole = new CommunityRole("tightropewalker"),
-    //    Message = "I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor, I'm a survivor"
-    //}
-    ];
+    public ObservableCollection<ChatMessageReceivedViewModel> MessageCollection { get; } = [];
 
     #endregion
 
@@ -74,166 +55,62 @@ public partial class LetsChatViewModel : ObservableRecipient
 
     private AsyncRelayCommand? _sendMessageCommand;
 
-    public ICommand SendMessageCommand => _sendMessageCommand ??= new AsyncRelayCommand(OnExecuteSendMessageCommand, OnCanExecuteSendMessageCommand);
-
-    private bool OnCanExecuteSendMessageCommand()
-    {
-        return true;
-    }
+    public ICommand SendMessageCommand => _sendMessageCommand ??= new AsyncRelayCommand(OnExecuteSendMessageCommand);
 
     private async Task OnExecuteSendMessageCommand()
     {
         var userMessage = UserMessage?.Trim() ?? string.Empty;
 
-        if (string.IsNullOrEmpty(userMessage))
+        AddUserMessageToHistory(userMessage);
+
+        try
         {
-            return;
+            var currentCharacterDetails = _characterService.GetSelectedCharacterDetails();
+
+            var extraContext = await GetClipboardContext().ConfigureAwait(true);
+
+            ShouldIncludeClipboardContext = false; // Reset the extra context option after it is used so the user is forced to do it each time.
+
+            var response = await _openAIService.SendPrompt(currentCharacterDetails, userMessage, extraContext).ConfigureAwait(true);
+
+            var message = $"{response.Content} [{response.MetaData.Usage.TotalTokens}]";
+
+            AddRobotMessageToHistory(response.CharacterType, message);
         }
-
-        //var result = await _openAIService.SendTestCompletion().ConfigureAwait(true);
-        var extraContext = string.Empty;
-        if (_sendClipboardContentWithNextCompletion)
+        catch (Exception e)
         {
-            extraContext = _lastClipboardContent ?? string.Empty;
-            _lastClipboardContent = string.Empty;
-            _sendClipboardContentWithNextCompletion = false;
+            AddErrorMessageToHistory(e.ToString());
         }
-
-
-
-        var result = await _openAIService.SendRealCompletion(_currentCommunityMember, userMessage, extraContext).ConfigureAwait(true);
-
-        var message = $"{result.Content} [{result.MetaData.Usage.TotalTokens}]";
-
-        MessageCollection.Add(new ChatMessageReceivedViewModel
-        {
-            IsActive = true,
-            CommunityRole = result.CommunityRole,
-            Message = message
-        });
-
-        UserMessage = string.Empty;
     }
 
     #endregion
 
-    #region CommunityMemberSelectedCommand
+    #region CharacterSelectedCommand
 
-    private RelayCommand? _communityMemberSelectedCommand;
+    private RelayCommand? _characterSelectedCommand;
 
-    public ICommand CommunityMemberSelectedCommand => _communityMemberSelectedCommand ??= new RelayCommand(OnExecuteCommunityMemberSelectedCommand, OnCanExecuteCommunityMemberSelectedCommand);
+    public ICommand CharacterSelectedCommand => _characterSelectedCommand ??= new RelayCommand(OnExecuteCharacterSelectedCommand);
 
-    private bool OnCanExecuteCommunityMemberSelectedCommand()
+    private void OnExecuteCharacterSelectedCommand()
     {
-        return true;
-    }
+        SelectedChatCharacter ??= _characterService.DefaultCharacter;
 
-    private void LoadCommunityMembers()
-    {
-        CommunityMemberCollection = [
-        new CommunityMemberViewModel
-        {
-            RoleDisplayName = @"Community_Member_Name_Pirate".GetLocalized(),
-            RoleIcon = @"ms-appx:///Assets/Pirate.png",
-            CommunityRole = new CommunityRole("pirate"),
-            CharacterPrompts =
-            [
-                "You are One-Eyed Willy from 'The Goonies'. You are awkwardly charismatic. While you answer our questions you cannot help to express your hatred of Black Beard.  ",
-                //"You hate Black Beard and you aren't quiet about it."
-            ],
-            Pithy = false,
-            Temperature = 1.5
-        },
-        new CommunityMemberViewModel
-        {
-            RoleDisplayName = @"Community_Member_Name_Magician".GetLocalized(),
-            RoleIcon = @"ms-appx:///Assets/Magician.png",
-            CommunityRole = new CommunityRole("magician"),
-            CharacterPrompts =
-            [
-                "You are a children's birthday party magician.  When you answer you like making words disappear and then reappear where we don't expect.  You like to be evasive in your answers, but in a playful way.  You enjoy using the magic wand emoji a lot.",
-                //"You like making words disappear and than reappear.",
-                //"You are a little too loose with the magic wand emoji."
-            ],
-            Pithy = true,
-            Temperature = 1.0
-        },
-        new CommunityMemberViewModel
-            {
-                RoleDisplayName = @"Community_Member_Name_TightRopeWalker".GetLocalized(),
-                RoleIcon = @"ms-appx:///Assets/TightropeWalker.png",
-                CommunityRole = new CommunityRole("tightropewalker"),
-                CharacterPrompts =
-                [
-                    "You are the black sheep of the flying Wallendas family. You aren't afraid of falling because you'll probably just respawn.  Whenever you write back to us you replace periods with underscores.",
-                    //"You aren't afraid of falling because you'll probably just respawn",
-                    //"You use _ where you should use ."
-                ],
-                Pithy = false,
-                Temperature = 1.1
-            },
-            ];
+        _characterService.SetSelected(SelectedChatCharacter);
 
-        SelectedCommunityMember = CommunityMemberCollection.First();
-
-        _currentCommunityMember = GetCommunityMember(SelectedCommunityMember);
-
-        SetMessagePlaceHolder(_currentCommunityMember.RoleDisplayName);
-    }
-
-    private void OnExecuteCommunityMemberSelectedCommand()
-    {
-        if (SelectedCommunityMember is null)
-        {
-            _currentCommunityMember = GetDefaultCommunityMember();
-        }
-
-        _currentCommunityMember = GetCommunityMember(SelectedCommunityMember);
-
-        SetMessagePlaceHolder(_currentCommunityMember.RoleDisplayName);
-    }
-
-    private static CommunityMember GetCommunityMember(CommunityMemberViewModel? subject)
-    {
-        if (subject is null)
-        {
-            return new CommunityMember();
-        }
-
-        return new CommunityMember
-        {
-            RoleDisplayName = subject?.RoleDisplayName ?? string.Empty,
-            CommunityRole = subject?.CommunityRole ?? CommunityRole.Empty,
-            CharacterPrompts = subject?.CharacterPrompts.ToList() ?? [],
-            Temperature = subject?.Temperature ?? 1.0,
-            Pithy = subject?.Pithy ?? true
-        };
+        SetMessagePlaceHolder(SelectedChatCharacter.RoleDisplayName);
     }
 
     #endregion
 
-    #region ToggleMonitoringClipboardCommand
+    #region ToggleShouldIncludeClipboardContextCommand
 
-    private RelayCommand? _toggleMonitoringClipboardCommand;
+    private RelayCommand? _toggleShouldIncludeClipboardContextCommand;
 
-    public ICommand ToggleMonitoringClipboardCommand => _toggleMonitoringClipboardCommand ??= new RelayCommand(OnExecuteToggleMonitoringClipboardCommand, OnCanExecuteToggleMonitoringClipboardCommand);
+    public ICommand ToggleShouldIncludeClipboardContextCommand => _toggleShouldIncludeClipboardContextCommand ??= new RelayCommand(OnExecuteToggleShouldIncludeClipboardContextCommand);
 
-    private bool OnCanExecuteToggleMonitoringClipboardCommand()
+    private void OnExecuteToggleShouldIncludeClipboardContextCommand()
     {
-        return true;
-    }
-
-    private void OnExecuteToggleMonitoringClipboardCommand()
-    {
-        if (IsMonitoringClipboard)
-        {
-            Clipboard.ContentChanged += OnClipboardContentChanged;
-
-        }
-        else
-        {
-            Clipboard.ContentChanged -= OnClipboardContentChanged;
-        }
+        // TODO: Anything we need to do here;  The boolean value has the desired value already.
     }
 
     #endregion
@@ -242,16 +119,15 @@ public partial class LetsChatViewModel : ObservableRecipient
 
     #endregion
 
-    private CommunityMember GetDefaultCommunityMember()
+    #region Private Methods
+
+    private void LoadCharacters()
     {
-        return new CommunityMember
-        {
-            RoleDisplayName = "HeyGPT",
-            CommunityRole = new CommunityRole("HeyGPT"),
-            CharacterPrompts = [],
-            Temperature = 1.0,
-            Pithy = true
-        };
+        ChatCharacterCollection = new ObservableCollection<ChatCharacterViewModel>(_characterService.Characters);
+
+        SelectedChatCharacter = _characterService.Selected;
+
+        SetMessagePlaceHolder(SelectedChatCharacter.RoleDisplayName);
     }
 
     private void SetMessagePlaceHolder(string roleDisplayName)
@@ -261,14 +137,62 @@ public partial class LetsChatViewModel : ObservableRecipient
         MessagePlaceholder = string.Format(formatString, roleDisplayName);
     }
 
-    private async void OnClipboardContentChanged(object sender, object e)
+    private async Task<string> GetClipboardContext()
     {
-        DataPackageView dataPackageView = Clipboard.GetContent();
-        if (dataPackageView.Contains(StandardDataFormats.Text))
+        if (!ShouldIncludeClipboardContext)
         {
-            _lastClipboardContent = await dataPackageView.GetTextAsync();
-            _sendClipboardContentWithNextCompletion = true;
+            return string.Empty;
         }
+
+        return await _clipboardContextService.GetContextAsync();
     }
 
+    private void AddUserMessageToHistory(string userMessage)
+    {
+        if (string.IsNullOrEmpty(userMessage))
+        {
+            return;
+        }
+
+        UserMessage = string.Empty;
+
+        MessageCollection.Add(new ChatMessageReceivedViewModel
+        {
+            IsActive = true,
+            CommunityRole = CharacterType.Local,
+            Message = userMessage
+        });
     }
+
+    private void AddRobotMessageToHistory(CharacterType characterType, string message)
+    {
+        if (string.IsNullOrEmpty(message))
+        {
+            return;
+        }
+
+        MessageCollection.Add(new ChatMessageReceivedViewModel
+        {
+            IsActive = true,
+            CommunityRole = characterType,
+            Message = message
+        });
+    }
+
+    private void AddErrorMessageToHistory(string errorMessage)
+    {
+        if (string.IsNullOrEmpty(errorMessage))
+        {
+            return;
+        }
+
+        MessageCollection.Add(new ChatMessageReceivedViewModel
+        {
+            IsActive = true,
+            CommunityRole = CharacterType.Error,
+            Message = errorMessage
+        });
+    }
+
+    #endregion
+}

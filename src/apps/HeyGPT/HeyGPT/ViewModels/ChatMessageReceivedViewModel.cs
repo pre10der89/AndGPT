@@ -6,8 +6,8 @@ namespace HeyGPT.App.ViewModels;
 public partial class ChatMessageReceivedViewModel : ObservableRecipient
 {
     [ObservableProperty]
-    private CommunityRole? _communityRole;
+    private CharacterType? _communityRole;
 
     [ObservableProperty]
-    private string _message;
+    private string _message = string.Empty;
 }

@@ -32,6 +32,8 @@
             IsBackEnabled="{x:Bind ViewModel.IsBackEnabled, Mode=OneWay}"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
             IsSettingsVisible="True"
+            IsPaneOpen="False"
+            IsPaneToggleButtonVisible="False"
             ExpandedModeThresholdWidth="1280"
             DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
             Header="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
@@ -41,7 +43,7 @@
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8F2;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_ChatWorkspace" helpers1:NavigationHelper.NavigateTo="HeyGPT.App.ViewModels.SampleDataViewModel">
+                <!--<NavigationViewItem x:Uid="Shell_ChatWorkspace" helpers1:NavigationHelper.NavigateTo="HeyGPT.App.ViewModels.SampleDataViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xea37;"/>
                     </NavigationViewItem.Icon>
@@ -50,7 +52,7 @@
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe80a;"/>
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
+                </NavigationViewItem>-->
             </NavigationView.MenuItems>
             <NavigationView.HeaderTemplate>
                 <DataTemplate>

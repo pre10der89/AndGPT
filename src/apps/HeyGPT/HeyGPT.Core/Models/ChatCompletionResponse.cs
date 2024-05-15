@@ -12,19 +12,19 @@ public readonly record struct ChatCompletionResponse
 {
     public ChatCompletionResponse()
     {
-        CommunityRole = CommunityRole.Empty;
+        CharacterType = CharacterType.Default;
         Content = ChatCompletionContent.Empty;
         MetaData = new ChatCompletionMetaData();
     }
 
-    public ChatCompletionResponse(CommunityRole communityRole, ChatCompletionContent messageData, ChatCompletionMetaData metaData)
+    public ChatCompletionResponse(CharacterType characterType, ChatCompletionContent messageData, ChatCompletionMetaData metaData)
     {
-        CommunityRole = communityRole;
+        CharacterType = characterType;
         Content = messageData;
         MetaData = metaData;
     }
 
-    public CommunityRole CommunityRole { get; init; }
+    public CharacterType CharacterType { get; init; }
 
     public ChatCompletionContent Content { get; init; }
 

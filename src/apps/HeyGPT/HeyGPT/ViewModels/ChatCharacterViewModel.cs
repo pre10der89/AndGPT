@@ -4,7 +4,7 @@ using HeyGPT.Core.Models;
 
 namespace HeyGPT.App.ViewModels;
 
-public partial class CommunityMemberViewModel : ObservableRecipient
+public partial class ChatCharacterViewModel : ObservableRecipient
 {
     [ObservableProperty]
     private string _roleDisplayName = string.Empty; 
@@ -13,12 +13,11 @@ public partial class CommunityMemberViewModel : ObservableRecipient
     private string _roleIcon = string.Empty;
 
     [ObservableProperty]
-    private CommunityRole _communityRole = CommunityRole.Empty;
+    private CharacterType _characterType = CharacterType.Default;
 
     public ObservableCollection<string> CharacterPrompts { get; init; } = [];
 
-    [ObservableProperty]
-    private double _temperature = 1.0;
+    [ObservableProperty] private float? _temperature = null;
 
     [ObservableProperty]
     private bool _pithy = true;

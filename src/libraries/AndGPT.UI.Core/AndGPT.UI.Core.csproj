@@ -24,8 +24,4 @@
 	<ItemGroup>
 		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\AndGPT.Core.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Contracts\Services\" />
-	</ItemGroup>
 </Project>

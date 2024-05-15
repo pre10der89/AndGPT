@@ -14,5 +14,15 @@ public sealed partial class LetsChatPage : Page
     {
         ViewModel = App.GetService<LetsChatViewModel>();
         InitializeComponent();
+
+        if (MessageHistory is not null)
+        {
+            MessageHistory.SelectionChanged += MessageHistoryOnSelectionChanged;
+        }
+    }
+
+    private void MessageHistoryOnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+       // throw new NotImplementedException();
     }
 }

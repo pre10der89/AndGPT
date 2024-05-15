@@ -1,11 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml;
 using HeyGPT.App.ViewModels;
-using HeyGPT.Core.Models;
-using Microsoft.UI;
-using Microsoft.UI.Xaml.Markup;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Shapes;
 
 #nullable disable
 
@@ -13,6 +8,21 @@ namespace HeyGPT.App.Selectors;
 
 public class ChatMessageTemplateSelector : DataTemplateSelector
 {
+    public DataTemplate DefaultTemplate
+    {
+        get; set;
+    }
+
+    public DataTemplate LocalTemplate
+    {
+        get; set;
+    }
+
+    public DataTemplate ErrorTemplate
+    {
+        get; set;
+    }
+
     public DataTemplate PirateTemplate
     {
         get; set;
@@ -36,6 +46,21 @@ public class ChatMessageTemplateSelector : DataTemplateSelector
         if (item is not ChatMessageReceivedViewModel viewModel)
         {
             return base.SelectTemplateCore(item);
+        }
+
+        if (string.Compare(viewModel.CommunityRole, "local", StringComparison.OrdinalIgnoreCase) == 0)
+        {
+            return LocalTemplate ?? base.SelectTemplateCore(item);
+        }
+
+        if (string.Compare(viewModel.CommunityRole, "error", StringComparison.OrdinalIgnoreCase) == 0)
+        {
+            return ErrorTemplate ?? base.SelectTemplateCore(item);
+        }
+
+        if (string.Compare(viewModel.CommunityRole, "default", StringComparison.OrdinalIgnoreCase) == 0)
+        {
+            return DefaultTemplate ?? base.SelectTemplateCore(item);
         }
 
         if (string.Compare(viewModel.CommunityRole, "pirate", StringComparison.OrdinalIgnoreCase) == 0)

@@ -1,152 +1,186 @@
-﻿using System.Runtime.CompilerServices;
-using AndGPT.Core.Contracts.Services;
-using Azure;
+﻿using AndGPT.Core.Contracts.Services;
 using Azure.AI.OpenAI;
 using HeyGPT.Core.Contracts.Services;
+using HeyGPT.Core.Exceptions;
 using HeyGPT.Core.Extensions;
 using HeyGPT.Core.Models;
 
 namespace HeyGPT.Core.Services;
 
+// TODO: We have a bunch of English hard-coded values in this file.  The string's repository is part of the application while this service is in a different assembly.
+//       In the real world, we'd need to send in localized versions of the system prompts that we hardcode here.  This could be done by injecting the resource
+//       service or by adding a configuration method where the built-in prompts are set.   Need to think about this more... 
+
+// TODO: The code that is building the ChatCompletionOptions are private methods making them hard to test.  We should probably create a builder
+//       that will allow us to test the relationship with ChatCharacterDetails.  Might also solve the localization issue stated above.
+
 public class OpenAIService : IOpenAIService
 {
-    private const string ApiKeyEnvVariableName = @"HeyGPTKey";
-    private const string ApiOrganizationEnvVariableName = @"HeyGPTOrganization";
+    #region Constants
+
+    private const string ApiKeyEnvVariableName = "HeyGPTKey";
+    private const string ApiOrganizationEnvVariableName = "HeyGPTOrganization";
+    private const string DefaultModelVersion = "gpt-3.5-turbo"; //"gpt-4", "gpt-4-turbo
+
+    #endregion
+
+    #region Fields
 
     private readonly IEnvironmentVariableService _environmentVariableService;
 
-    private bool _useAzureOpenAI = false;
     private OpenAIClient? _openAIClient;
-    private OpenAISecretKey _secretKey = OpenAISecretKey.Empty;
-    private string _organizationId = string.Empty;
+
+    #endregion
+
+    #region Constructor(s)
 
     // ReSharper disable once ConvertToPrimaryConstructor
     public OpenAIService(IEnvironmentVariableService environmentVariableService)
     {
-        _useAzureOpenAI = false;
-
         _environmentVariableService = environmentVariableService;
     }
 
-    public async Task InitializeAsync()
+    #endregion
+
+    #region IOpenAIService Members
+
+    public async Task LoginAsync()
     {
-        // TODO: Use User Secrets
-        var secretKey = _environmentVariableService.GetEnvironmentVariable(ApiKeyEnvVariableName);
-
-        _useAzureOpenAI = false;
-        _secretKey = new OpenAISecretKey(secretKey);
-        _organizationId = _environmentVariableService.GetEnvironmentVariable(ApiOrganizationEnvVariableName);
-
-
-        //_openAIClient = _useAzureOpenAI
-        //    ? new OpenAIClient(
-        //        new Uri("https://your-azure-openai-resource.com/"),
-        //        new AzureKeyCredential("your-azure-openai-resource-api-key"))
-        //    : new OpenAIClient("your-api-key-from-platform.openai.com");
-
-        // TODO: Determine if we should maintain an instance of the OpenAIClient or whether this is something you do for each round...
-        // TODO: We may consider wiping the secret key immediate after we create the OpenAIClient.  Is there any reason to keep it around?      
-
-        _openAIClient = new OpenAIClient(_secretKey.Value);
+        CheckLoggedIn();
 
         await Task.CompletedTask;
     }
 
-    public async Task<ChatCompletionResponse> SendRealCompletion(CommunityMember communityMember, string message, string extraContext = "")
+    public async Task LogoutAsync()
     {
-        _openAIClient ??= new OpenAIClient(_secretKey.Value);
+        _openAIClient = null;
 
-        var chatCompletionsOptions = new ChatCompletionsOptions()
+        await Task.CompletedTask;
+    }
+
+    public async Task<ChatCompletionResponse> SendPrompt(string message, string extraContext = "")
+    {
+        return await SendPrompt(new ChatCharacterDetails(), message, extraContext);
+    }
+
+    public async Task<ChatCompletionResponse> SendPrompt(ChatCharacterDetails chatCharacterDetails, string message, string extraContext = "")
+    {
+        if (string.IsNullOrWhiteSpace(message))
         {
-            DeploymentName = "gpt-3.5-turbo", //"gpt-4", // Use DeploymentName for "model" with non-Azure clients
-            Messages =
-            {
-                // The system message represents instructions or other guidance about how the assistant should behave
-                new ChatRequestSystemMessage($"You are a helpful assistant. You are a {communityMember.CommunityRole.Value}"),
-                // new ChatRequestUserMessage("Can you help me?")
-            }
+            throw new ArgumentException("A message is required!", nameof(message));
+        }
+
+        CheckLoggedIn();
+
+        var chatCompletionsOptions = new ChatCompletionsOptions
+        {
+            DeploymentName = DefaultModelVersion
         };
 
-        if (communityMember.Pithy)
+
+        SetPromptOptions(chatCompletionsOptions, chatCharacterDetails);
+
+        AddCharacterTraits(chatCompletionsOptions, chatCharacterDetails);
+
+        PreprocessAndAddUserMessage(chatCompletionsOptions, message, extraContext);
+
+        var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
+
+        return response.GetCompletionResponse(chatCharacterDetails.CharacterType);
+    }
+
+
+    public async Task<ChatCompletionResponse> SendPromptWithCannedResponse(ChatCompletionResponse response)
+    {
+        // TODO: Remove this once we have a better idea how all the different responses are rendered.
+        //       We don't want to waste tokens on the API account testing how a message is rendered.
+
+        await Task.CompletedTask;
+
+        return response;
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void CheckLoggedIn()
+    {
+        if (_openAIClient is not null)
         {
-            chatCompletionsOptions.Messages.Add(new ChatRequestSystemMessage("Be pithy in your answer, I'm paying for this!"));
+            return;
         }
 
-        foreach (var prompt in communityMember.CharacterPrompts)
+        try
         {
-            chatCompletionsOptions.Messages.Add(new ChatRequestSystemMessage(prompt));
-        }
+            // TODO: Use User Secrets leaving the ENV method as a backup.  Should be able to set the local settings with the user secrets as well.
+            // TODO: Ultimately, we'd want to do some real OAuth here... 
+            var secretKey = new OpenAISecretKey(_environmentVariableService.GetEnvironmentVariable(ApiKeyEnvVariableName));
 
-        chatCompletionsOptions.Messages.Add(new ChatRequestUserMessage(message));
+            _openAIClient = new OpenAIClient(secretKey.Value);
+        }
+        catch (Exception ex)
+        {
+            throw new OpenAIInitializationException(
+                "Failed to initialize the OpenAIClient - Ensure you have set the 'HeyGPTKey' Environment Variable with a valid OpenAI API Key", ex);
+        }
+    }
+
+    private void AppendExtraContentToPrompt(ChatCompletionsOptions chatCompletionsOptions, string extraContext)
+    {
+        // TODO: This is only a POC right now... The idea is that we can push content to the next prompt from the clipboard.  This was seen in the
+        //       OpenAI Spring Update demos regarding the Mac desktop application where they copied text to the clipboard and sent with the prompt.
+        //       It is unclear what the semantics of that feature are
 
         if (!string.IsNullOrEmpty(extraContext))
         {
             chatCompletionsOptions.Messages.Add(new ChatRequestUserMessage(extraContext));
         }
-
-        chatCompletionsOptions.Temperature = (float)communityMember.Temperature;
-
-        var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
-
-        return response.GetCompletionResponse(communityMember.CommunityRole);
     }
-    public async Task<ChatCompletionResponse> SendRealCompletion2(CommunityMember communityMember, string message)
+
+    private void PreprocessAndAddUserMessage(ChatCompletionsOptions chatCompletionsOptions, string message, string extraContext)
     {
-        _openAIClient ??= new OpenAIClient(_secretKey.Value);
+        // TODO: Determine what sort of pre-processing is done in ChatGPT... We may want to examine
+        // the message to add custom inferred context. ChatGPT probably does something like this to
+        // determine whether to call DALL-E or just a text prompt.
 
-        var chatCompletionsOptions = new ChatCompletionsOptions()
-        {
-            DeploymentName = "gpt-3.5-turbo", //"gpt-4", // Use DeploymentName for "model" with non-Azure clients
-            Messages =
-            {
-                // The system message represents instructions or other guidance about how the assistant should behave
-                new ChatRequestSystemMessage("You are a helpful assistant. You will talk like a pirate."),
-                new ChatRequestSystemMessage("Be concise in your answer, I'm paying for this!"),
-                // User messages represent current or historical input from the end user
-                new ChatRequestUserMessage("Can you help me?"),
-                // Assistant messages represent historical responses from the assistant
-                //new ChatRequestAssistantMessage("Arrrr! Of course, me hearty! What can I do for ye?"),
-                //new ChatRequestUserMessage("What's the best way to train a parrot?"),
-                //new ChatRequestUserMessage("Can you write me a C# method only a pirate would love?"),
-                //new ChatRequestUserMessage("Can you create me a table of pirate booty?"),
-                new ChatRequestUserMessage(message),
-            }
-        };
+        // Add the prompt entered by the user...
+        chatCompletionsOptions.AddUserMessage(message);
 
-        var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
-
-        return response.GetCompletionResponse(new CommunityRole("Pirate"));
+        AppendExtraContentToPrompt(chatCompletionsOptions, extraContext);
     }
 
-    public async Task<ChatCompletionResponse> SendTestCompletion()
+    private void SetPromptOptions(ChatCompletionsOptions chatCompletionsOptions, ChatCharacterDetails chatCharacterDetails)
     {
-        return GetCannedResponse();
+        // Set how crazy the responses should be :)
+        chatCompletionsOptions.SetCompletionTemperature(chatCharacterDetails.Temperature);
 
-        _openAIClient ??= new OpenAIClient(_secretKey.Value);
-
-        var chatCompletionsOptions = new ChatCompletionsOptions()
+        // If the user wants the responses to be pithy or concise (to save money) then this flag should be set.  This will tell ChatGPT to use less tokens!
+        if (chatCharacterDetails.ShouldBePithy)
         {
-            DeploymentName = "gpt-3.5-turbo", // Use DeploymentName for "model" with non-Azure clients
-            Messages =
-            {
-                // The system message represents instructions or other guidance about how the assistant should behave
-                new ChatRequestSystemMessage("You are a helpful assistant. You will talk like a pirate."),
-                new ChatRequestSystemMessage("Be concise in your answer, I'm paying for this!"),
-                // User messages represent current or historical input from the end user
-                new ChatRequestUserMessage("Can you help me?"),
-                // Assistant messages represent historical responses from the assistant
-                //new ChatRequestAssistantMessage("Arrrr! Of course, me hearty! What can I do for ye?"),
-                //new ChatRequestUserMessage("What's the best way to train a parrot?"),
-                new ChatRequestUserMessage("Can you write me a C# method only a pirate would love?"),
-                new ChatRequestUserMessage("Can you create me a table of pirate booty?"),
-            }
-        };
-
-        var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
-
-        return response.GetCompletionResponse(new CommunityRole("Pirate"));
+            chatCompletionsOptions.Messages.Add(new ChatRequestSystemMessage("Be pithy in your answer!"));
+        }
     }
 
+    private void AddCharacterTraits(ChatCompletionsOptions chatCompletionsOptions, ChatCharacterDetails chatCharacterDetails)
+    {
+        if (!chatCharacterDetails.CharacterType.IsSpecified)
+        {
+            return;
+        }
+
+        // Top-Level System Prompt
+        chatCompletionsOptions.AddSystemMessage("You are a helpful assistant.");
+
+        // If a character type has been specified we will add a system message instructing ChatGPT to take on the specified personality. 
+        chatCompletionsOptions.Messages.Add(new ChatRequestSystemMessage($"You should act like a {chatCharacterDetails.CharacterType.Value}"));
+
+        // If there are any additional characteristics then they will be sent to further instruct ChatGPT how to response.
+        // TODO: Determine whether this is better to be a UserMessage?
+        chatCompletionsOptions.AddSystemMessages(chatCharacterDetails.AdditionalCharacteristics);
+    }
+
+    // TODO: Move to Application Service
     private ChatCompletionResponse GetCannedResponse()
     {
         var cannedMessage =
@@ -176,6 +210,8 @@ class PirateHelper
 
 Run this code in your C# application and ye'll be sailin' the high seas in no time! Arrr! [228]";
 
-        return new ChatCompletionResponse(new CommunityRole("Pirate"), new ChatCompletionContent(ChatRole.Assistant, cannedMessage), new ChatCompletionMetaData());
+        return new ChatCompletionResponse(new CharacterType("Pirate"), new ChatCompletionContent(ChatRole.Assistant, cannedMessage), new ChatCompletionMetaData());
     }
+
+    #endregion
 }

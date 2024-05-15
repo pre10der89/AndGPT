@@ -133,23 +133,23 @@ internal static class ChatCompletionExtensions
         return firstMessage is not null ? new ChatCompletionContent(firstMessage.Role, firstMessage.Content) : new ChatCompletionContent();
     }
 
-    public static ChatCompletionResponse GetCompletionResponse(this Response<ChatCompletions>? subject, CommunityRole? communityRole)
+    public static ChatCompletionResponse GetCompletionResponse(this Response<ChatCompletions>? subject, CharacterType? communityRole)
     {
         if (subject is null || !subject.HasValue)
         {
             return default;
         }
 
-        return GetCompletionResponse(subject.Value, communityRole ?? CommunityRole.Empty);
+        return GetCompletionResponse(subject.Value, communityRole ?? CharacterType.Default);
     }
 
-    public static ChatCompletionResponse GetCompletionResponse(this ChatCompletions? subject, CommunityRole? communityRole)
+    public static ChatCompletionResponse GetCompletionResponse(this ChatCompletions? subject, CharacterType? communityRole)
     {
         if (subject?.Choices is null || subject.Choices.Count == 0)
         {
             return default;
         }
 
-        return new ChatCompletionResponse(communityRole ?? CommunityRole.Empty, subject.GetContent(), subject.GetMetaData());
+        return new ChatCompletionResponse(communityRole ?? CharacterType.Default, subject.GetContent(), subject.GetMetaData());
     }
 }

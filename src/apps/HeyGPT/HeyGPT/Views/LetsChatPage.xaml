@@ -10,35 +10,39 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:ui="using:CommunityToolkit.WinUI.UI"
     mc:Ignorable="d">
 
     <Page.Resources>
+        <DataTemplate x:Key="DefaultTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <controls:MarkdownTextBlock Text="{x:Bind Message}" Background="Transparent" CodeMargin="0, 15, 0, 15"/>
+        </DataTemplate>
+        <DataTemplate x:Key="LocalTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <StackPanel Orientation="Horizontal">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE77B;"/>
+                <controls:MarkdownTextBlock Margin="10, 0, 0, 0" Text="{x:Bind Message}" Background="Transparent"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="ErrorTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
+            <StackPanel Orientation="Horizontal">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE783;"/>
+                <RichTextBlock TextWrapping="Wrap" Margin="10, 0, 0, 0">
+                    <Paragraph>
+                        <Run Foreground="Red" Text="{x:Bind Message}"/>
+                    </Paragraph>
+                </RichTextBlock>
+            </StackPanel>
+        </DataTemplate>
+
         <DataTemplate x:Key="PirateTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
-            <!--<RichTextBlock TextWrapping="Wrap">
-                <Paragraph>
-                    <Run Foreground="Red" Text="{x:Bind Message}"/>
-                </Paragraph>
-            </RichTextBlock>-->
-
             <controls:MarkdownTextBlock Text="{x:Bind Message}" FontFamily="Segoe Script"  Background="Transparent" CodeMargin="0, 15, 0, 15"/>
-
         </DataTemplate>
+
         <DataTemplate x:Key="MagicianTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
-            <!--<RichTextBlock TextWrapping="Wrap">
-                <Paragraph>
-                    <Run Foreground="Blue" Text="{x:Bind Message}"/>
-                </Paragraph>
-            </RichTextBlock>-->
-
             <controls:MarkdownTextBlock Text="{x:Bind Message}" FontSize="18" FontFamily="Papyrus" Foreground="Gold" Background="Transparent" CodeMargin="0, 15, 0, 15"/>
-
         </DataTemplate>
+
         <DataTemplate x:Key="TightRopeWalkerTemplate" x:DataType="viewModels:ChatMessageReceivedViewModel">
-            <!--<RichTextBlock TextWrapping="Wrap">
-                <Paragraph>
-                    <Run Foreground="Green" Text="{x:Bind Message}"/>
-                </Paragraph>
-            </RichTextBlock>-->
             <controls:MarkdownTextBlock Text="{x:Bind Message}" FontSize="18" FontFamily="Arial Narrow" Foreground="SkyBlue" Background="Transparent" CodeMargin="0, 15, 0, 15"/>
         </DataTemplate>
 
@@ -51,10 +55,13 @@
         </DataTemplate>
 
         <selectors:ChatMessageTemplateSelector x:Key="ChatMessageTemplateSelector"
-                                           PirateTemplate="{StaticResource PirateTemplate}"
-                                           MagicianTemplate="{StaticResource MagicianTemplate}"
-                                           TightRopeWalkerTemplate="{StaticResource TightRopeWalkerTemplate}"
-                                           OtherCommunityMemberTemplate="{StaticResource OtherCommunityMemberTemplate}"/>
+            DefaultTemplate="{StaticResource DefaultTemplate}"
+            LocalTemplate="{StaticResource LocalTemplate}"
+            ErrorTemplate="{StaticResource ErrorTemplate}"
+            PirateTemplate="{StaticResource PirateTemplate}"
+            MagicianTemplate="{StaticResource MagicianTemplate}"
+            TightRopeWalkerTemplate="{StaticResource TightRopeWalkerTemplate}"
+            OtherCommunityMemberTemplate="{StaticResource OtherCommunityMemberTemplate}"/>
 
 
         <!--PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}"-->
@@ -203,18 +210,22 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+
+                <!--ui:ListViewExtensions.Command="{x:Bind ViewModel.CharacterSelectedCommand}"-->
+
                 <ListView
                 x:Name="CommunityMemberListViewControl"
                 MaxWidth="300"
                 SelectionMode="Single"
-                SelectedItem="{x:Bind ViewModel.SelectedCommunityMember, Mode=TwoWay}"
+                SelectedItem="{x:Bind ViewModel.SelectedChatCharacter, Mode=TwoWay}"
                 IsItemClickEnabled="True"
-                ItemsSource="{x:Bind ViewModel.CommunityMemberCollection, Mode=OneWay}"
+                ItemsSource="{x:Bind ViewModel.ChatCharacterCollection, Mode=OneWay}"
                 ItemContainerStyle="{StaticResource ListViewItemStyleCommunityMembers}"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch"
+               >
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="viewModels:CommunityMemberViewModel">
+                        <DataTemplate x:DataType="viewModels:ChatCharacterViewModel">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="{x:Bind RoleIcon, Mode=OneWay}" VerticalAlignment="Center"
                                        Width="44" 
@@ -226,7 +237,7 @@
                     </ListView.ItemTemplate>
                     <interactivity:Interaction.Behaviors>
                         <core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{Binding ElementName=CommunityMemberListViewControl}">
-                            <core:InvokeCommandAction Command="{x:Bind ViewModel.CommunityMemberSelectedCommand}"/>
+                            <core:InvokeCommandAction Command="{x:Bind ViewModel.CharacterSelectedCommand}"/>
                         </core:EventTriggerBehavior>
                     </interactivity:Interaction.Behaviors>
                 </ListView>
@@ -237,40 +248,54 @@
                     </Grid.RowDefinitions>
 
                     <TextBox PlaceholderText="Scratch Pad"  Height="120" Style="{StaticResource PromptTextBoxStyle}"/>
-                    <ToggleButton Grid.Row="1" Margin="0, 5, 0, 0" HorizontalAlignment="Stretch" Content="Monitor Clipboard" IsChecked="{x:Bind ViewModel.IsMonitoringClipboard, Mode=TwoWay}" Command="{x:Bind ViewModel.ToggleMonitoringClipboardCommand, Mode=OneWay}"/>
+
                 </Grid>
             </Grid>
 
-            <Grid Grid.Column="1" Margin="0, 10, 0, 0 ">
+            <Grid Grid.Column="1" Margin="50, 10, 0, 0 " MinWidth="500" MaxWidth="900" HorizontalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <ScrollViewer Grid.Row="0" HorizontalAlignment="Stretch" VerticalScrollMode="Enabled" IsTabStop="True">
-                    <Grid  Width="500" HorizontalAlignment="Center">
-                        <ListView
-                            ItemsSource="{x:Bind ViewModel.MessageCollection, Mode=OneWay}"
-                            ItemTemplateSelector="{StaticResource ChatMessageTemplateSelector}"
-                            ItemContainerStyle="{StaticResource ListViewItemStyleChatHistory}"/>
+                    <Grid HorizontalAlignment="Center" Padding="10">
+                        <ListView x:Name="MessageHistory"
+                                  ItemsSource="{x:Bind ViewModel.MessageCollection, Mode=OneWay}"
+                                  ItemTemplateSelector="{StaticResource ChatMessageTemplateSelector}"
+                                  ItemContainerStyle="{StaticResource ListViewItemStyleChatHistory}"/>
                     </Grid>
                 </ScrollViewer>
 
-                <Grid Grid.Row="1" HorizontalAlignment="Center" Width="500" Margin="0, 10, 0, 0 ">
+                <Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="0, 10, 0, 0 ">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*" MinWidth="300"/>
-                        <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox
-                        x:Uid="Chat_Prompt_Text_Box"
-                        Grid.Column="0"
-                        MaxHeight="120"
-                        Style="{StaticResource PromptTextBoxStyle}"
-                        PlaceholderText="{x:Bind ViewModel.MessagePlaceholder, Mode=OneWay}"
-                        Text="{x:Bind ViewModel.UserMessage, Mode=TwoWay}"/>
-                    <Button Grid.Column="2" Width="35" Height="50" VerticalAlignment="Bottom" Style="{StaticResource SimpleGlyphButtonStyle}" Content="&#xE110;"
-                        Command="{x:Bind ViewModel.SendMessageCommand, Mode=OneWay}"/>
+                    
+                    <ToggleButton x:Uid="Should_Include_Clipboard_Context" Grid.Column="0"
+                                  Width="50" 
+                                  Height="50"
+                                  VerticalAlignment="Bottom"
+                                  IsChecked="{x:Bind ViewModel.ShouldIncludeClipboardContext, Mode=TwoWay}"
+                                  Command="{x:Bind ViewModel.ToggleShouldIncludeClipboardContextCommand, Mode=OneWay}">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE77F;"/>
+                    </ToggleButton>
+                    <TextBox x:Uid="Chat_Prompt_Text_Box"
+                             Grid.Column="1"
+                             Margin="5, 0, 0, 0"
+                             MaxHeight="120"
+                             Style="{StaticResource PromptTextBoxStyle}"
+                             PlaceholderText="{x:Bind ViewModel.MessagePlaceholder, Mode=OneWay}"
+                             Text="{x:Bind ViewModel.UserMessage, Mode=TwoWay}"/>
+                    <Button Grid.Column="2" 
+                            Margin="5, 0, 0, 0"
+                            Width="35" Height="50"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource SimpleGlyphButtonStyle}"
+                            Content="&#xE110;"
+                            Command="{x:Bind ViewModel.SendMessageCommand, Mode=OneWay}"/>
                 </Grid>
             </Grid>
 

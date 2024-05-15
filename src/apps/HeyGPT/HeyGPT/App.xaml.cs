@@ -1,6 +1,9 @@
 ﻿using AndGPT.Core.Contracts.Services;
 using AndGPT.Core.Ioc;
 using AndGPT.Core.Services;
+using AndGPT.UI.Core.Contracts.Services;
+using AndGPT.UI.Core.IoC;
+using AndGPT.UI.Core.Services;
 using HeyGPT.App.Activation;
 using HeyGPT.App.Contracts.Services;
 using HeyGPT.App.Models;
@@ -19,7 +22,7 @@ namespace HeyGPT.App;
 // To learn more about WinUI 3, see https://docs.microsoft.com/windows/apps/winui/winui3/.
 public partial class App : Application
 {
-    // The .NET Generic Host provides dependency injection, configuration, logging, and other services.
+    // The .NET Default Host provides dependency injection, configuration, logging, and other services.
     // https://docs.microsoft.com/dotnet/core/extensions/generic-host
     // https://docs.microsoft.com/dotnet/core/extensions/dependency-injection
     // https://docs.microsoft.com/dotnet/core/extensions/configuration
@@ -70,7 +73,12 @@ public partial class App : Application
             // Core Services
             services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddInfrastructure();
+            services.AddWindowsInfrastructure();
             services.AddOpenAI();
+
+            // Application Services
+            services.AddSingleton<ICharacterService, CharacterService>();
+            services.AddSingleton<IClipboardContextService, ClipboardContextService>();
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();

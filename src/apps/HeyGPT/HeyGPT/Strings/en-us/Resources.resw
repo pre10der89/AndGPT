@@ -198,4 +198,10 @@
   <data name="LetsChat_Enter_Message_TextBoxPlaceholder_Format_Text" xml:space="preserve">
     <value>Ask the {0}</value>
   </data>
+  <data name="Chat_Character_DisplayName_ChatGPT" xml:space="preserve">
+    <value>ChatGPT</value>
+  </data>
+  <data name="Should_Include_Clipboard_Context.ToolTipService.ToolTip" xml:space="preserve">
+    <value>Click here to include the clipboard content in the next prompt.</value>
+  </data>
 </root>

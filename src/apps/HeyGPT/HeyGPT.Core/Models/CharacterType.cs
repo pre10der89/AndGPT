@@ -1,22 +1,26 @@
 ﻿namespace HeyGPT.Core.Models;
 
-public readonly record struct CommunityRole
+public readonly record struct CharacterType
 {
     public string Value
     {
         get;
     }
 
-    public static CommunityRole Empty => new();
+    public static CharacterType Default => new("Default");
 
-    public bool IsEmpty => string.IsNullOrEmpty(Value);
+    public static CharacterType Local = new("Local");
 
-    public CommunityRole()
+    public static CharacterType Error = new("Error");
+
+    public bool IsSpecified => !string.IsNullOrEmpty(Value);
+
+    public CharacterType()
     {
         Value = string.Empty;
     }
 
-    public CommunityRole(string value)
+    public CharacterType(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -29,10 +33,10 @@ public readonly record struct CommunityRole
 
 
     /// <summary>
-    /// Extract the string representation of the specified <see cref="CommunityRole"/>.
+    /// Extract the string representation of the specified <see cref="CharacterType"/>.
     /// </summary>
-    /// <param name="value">The <see cref="CommunityRole"/> object from which the string representation will be extracted.</param>
-    public static implicit operator string(CommunityRole value)
+    /// <param name="value">The <see cref="CharacterType"/> object from which the string representation will be extracted.</param>
+    public static implicit operator string(CharacterType value)
     {
         ArgumentNullException.ThrowIfNull(value);
 
@@ -40,14 +44,13 @@ public readonly record struct CommunityRole
     }
 
     /// <summary>
-    /// Construct a <see cref="CommunityRole"/> from the specified string value.
+    /// Construct a <see cref="CharacterType"/> from the specified string value.
     /// </summary>
     /// <param name="value">The string value that represents the object.</param>
-    public static explicit operator CommunityRole(string value) => new(value);
+    public static explicit operator CharacterType(string value) => new(value);
 
     public override int GetHashCode()
     {
-        // Use case-insensitive hash code for the Message property
         return Value?.ToLowerInvariant().GetHashCode() ?? 0;
     }
 
