@@ -1,6 +1,8 @@
-﻿namespace HeyGPT.App.Contracts.Services;
+﻿using AndGPT.Core.Models;
+
+namespace HeyGPT.App.Contracts.Services;
 
 public interface IClipboardContextService
 {
-    Task<string> GetContextAsync();
+    Task<ClipboardText> GetContextAsync();
 }

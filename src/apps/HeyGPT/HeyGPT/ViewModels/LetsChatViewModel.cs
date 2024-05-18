@@ -8,6 +8,7 @@ using HeyGPT.App.Contracts.Services;
 using HeyGPT.Core.Models;
 using WinUIEx.Messaging;
 using Windows.Networking.NetworkOperators;
+using AndGPT.Core.Models;
 
 namespace HeyGPT.App.ViewModels;
 
@@ -71,7 +72,7 @@ public partial class LetsChatViewModel : ObservableRecipient
 
             ShouldIncludeClipboardContext = false; // Reset the extra context option after it is used so the user is forced to do it each time.
 
-            var response = await _openAIService.SendPrompt(currentCharacterDetails, userMessage, extraContext).ConfigureAwait(true);
+            var response = await _openAIService.SendPrompt(currentCharacterDetails, userMessage, extraContext.Text).ConfigureAwait(true);
 
             var message = $"{response.Content} [{response.MetaData.Usage.TotalTokens}]";
 
@@ -137,11 +138,11 @@ public partial class LetsChatViewModel : ObservableRecipient
         MessagePlaceholder = string.Format(formatString, roleDisplayName);
     }
 
-    private async Task<string> GetClipboardContext()
+    private async Task<ClipboardText> GetClipboardContext()
     {
         if (!ShouldIncludeClipboardContext)
         {
-            return string.Empty;
+            return ClipboardText.Empty;
         }
 
         return await _clipboardContextService.GetContextAsync();

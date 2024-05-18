@@ -1,12 +1,13 @@
 ﻿using AndGPT.Core.Contracts.Services;
 using AndGPT.Core.Ioc;
 using AndGPT.Core.Services;
-using AndGPT.UI.Core.Contracts.Services;
 using AndGPT.UI.Core.IoC;
 using AndGPT.UI.Core.Services;
 using HeyGPT.App.Activation;
+using HeyGPT.App.Contracts.Policies;
 using HeyGPT.App.Contracts.Services;
 using HeyGPT.App.Models;
+using HeyGPT.App.Policies;
 using HeyGPT.App.Services;
 using HeyGPT.App.ViewModels;
 using HeyGPT.App.Views;
@@ -72,15 +73,18 @@ public partial class App : Application
 
             // Core Services
             services.AddSingleton<ISampleDataService, SampleDataService>();
+            services.AddSingleton<ILoginService, LoginService>();
             services.AddInfrastructure();
             services.AddWindowsInfrastructure();
             services.AddOpenAI();
 
             // Application Services
             services.AddSingleton<ICharacterService, CharacterService>();
+            services.AddSingleton<IClipboardContextPolicy, ClipboardContextPolicy>();
             services.AddSingleton<IClipboardContextService, ClipboardContextService>();
 
             // Views and ViewModels
+            services.AddTransient<LoginPageViewModel>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
             services.AddTransient<DataGridViewModel>();
