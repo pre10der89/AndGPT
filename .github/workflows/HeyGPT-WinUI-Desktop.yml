@@ -43,14 +43,16 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    # Install the Windows 10 SDK
-    #- name: Install Windows 10 SDK
-    #  run: |
-    #    choco install windows-sdk-10.1
-
     # Setup MSBuild
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
+
+    # Decode PFX file
+    - name: Decode PFX file
+      shell: pwsh
+      run: |
+        $bytes = [Convert]::FromBase64String("${{ env.PFX_BASE64 }}")
+        [System.IO.File]::WriteAllBytes("signingkey.pfx", $bytes)
 
     # Create artifacts directories
     - name: Create artifacts directories
@@ -86,15 +88,14 @@ jobs:
     #   working-directory: ${{ github.workspace }}
     #   run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
 
-    # Decode PFX file
-    - name: Decode PFX file
-      run: echo ${{ env.PFX_BASE64 }} | base64 -d > signingkey.pfx
+
 
     # Copy reference assemblies
-    - name: Copy reference assemblies
-      run: |
-        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
-        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.exe" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
+    #- name: Copy reference assemblies
+    #  shell: pwsh
+    #  run: |
+    #    Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
+    #    Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.exe" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
 
     # Create MSIX package
     - name: Create MSIX package
@@ -105,18 +106,23 @@ jobs:
         CI_BUILD: "true"
         MSIX_OUTPUT_DIR: ${{ env.MSIX_OUTPUT_DIR }}
       working-directory: ${{ github.workspace }}
-      run: msbuild ${{ env.SOLUTION_FILE }} /t:Restore,Rebuild /p:Configuration=${{ matrix.configuration }} /p:AppxBundle=${{ env.APPX_BUNDLE }} /p:UapAppxPackageBuildMode=${{ env.PACKAGE_BUILD_MODE }} /p:Deterministic=${{ env.DETERMINISTIC }} /p:ContinuousIntegrationBuild=${{ env.CI_BUILD }} /p:Platform=${{ matrix.platform }} /p:PackageCertificateKeyFile=signingkey.pfx /p:PackageCertificatePassword=${{ env.PFX_PASSWORD }} /p:PackageOutputPath=${{ env.MSIX_OUTPUT_DIR }}
+      shell: pwsh
+      run: |
+        msbuild ${{ env.SOLUTION_FILE }} /t:Restore,Rebuild /p:Configuration=${{ matrix.configuration }} /p:AppxBundle=${{ env.APPX_BUNDLE }} /p:UapAppxPackageBuildMode=${{ env.PACKAGE_BUILD_MODE }} /p:Deterministic=${{ env.DETERMINISTIC }} /p:ContinuousIntegrationBuild=${{ env.CI_BUILD }} /p:Platform=${{ matrix.platform }} /p:PackageCertificateKeyFile=signingkey.pfx /p:PackageCertificatePassword=${{ env.PFX_PASSWORD }} /p:PackageOutputPath=${{ env.MSIX_OUTPUT_DIR }}
 
     # Delete PFX file
     - name: Delete PFX file
+      shell: pwsh
       run: Remove-Item -Path signingkey.pfx -Force
 
     # Gather debug files
     - name: Gather debug files
+      shell: pwsh
       run: Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.pdb" | ForEach-Object { Copy-Item $_.FullName ${{ env.PDB_OUTPUT_DIR }} }
 
     # Zip debug files
     - name: Zip debug files
+      shell: pwsh
       run: Compress-Archive -Path ${{ env.PDB_OUTPUT_DIR }}\* -DestinationPath ${{ env.PDB_OUTPUT_DIR }}\debug_files.zip -Force
 
     # Upload build artifacts
