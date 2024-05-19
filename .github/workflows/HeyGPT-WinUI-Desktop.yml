@@ -19,6 +19,7 @@ jobs:
       OUTPUT_DIR: ${{ github.workspace }}/output
       DEPENDENCY_PACKAGES_DIR: ${{ github.workspace }}/Artifacts/DependencyPackages
       MSIX_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSIX
+      MSI_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSI
       BUILD_ARTIFACTS_PATH: ${{ env.ARTIFACTS_BIN_DIR }}/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT
       PDB_OUTPUT_DIR: ${{ env.ARTIFACTS_BASE_DIR }}/PDBs
       REF_ASSEMBLIES_DIR: ${{ env.ARTIFACTS_BASE_DIR }}/ReferenceAssemblies
@@ -42,13 +43,17 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
 
+    #- name: Install WiX Toolset
+    #  run: choco install wix
+
     - name: Create artifacts directories
       run: |
         mkdir -p ${{ env.ARTIFACTS_BIN_DIR }}
         mkdir -p ${{ env.DEPENDENCY_PACKAGES_DIR }}
         mkdir -p ${{ env.MSIX_OUTPUT_DIR }}
+        mkdir -p ${{ env.MSI_OUTPUT_DIR }}
         mkdir -p ${{ env.PDB_OUTPUT_DIR }}
-        mkdir -p ${{ env.REF_ASSEMBLIES_DIR }}              
+        mkdir -p ${{ env.REF_ASSEMBLIES_DIR }}
 
     - name: Restore dependencies
       working-directory: ${{ github.workspace }}
@@ -56,14 +61,19 @@ jobs:
 
     - name: Build solution
       working-directory: ${{ github.workspace }}
-      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:Platform=${{ matrix.platform }}
+      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
 
     - name: Run tests
       working-directory: ${{ github.workspace }}
-      run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:Platform=${{ matrix.platform }}
+      run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
 
     - name: Decode PFX file
       run: echo ${{ env.PFX_BASE64 }} | base64 -d > signingkey.pfx
+
+    - name: Copy reference assemblies
+      run: |
+        find ${{ github.workspace }} -name "*.dll" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
+        find ${{ github.workspace }} -name "*.exe" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
 
     - name: Create MSIX package
       env:
@@ -72,6 +82,7 @@ jobs:
         DETERMINISTIC: "true"
         CI_BUILD: "true"
         MSIX_OUTPUT_DIR: ${{ env.MSIX_OUTPUT_DIR }}
+      working-directory: ${{ github.workspace }}
       run: msbuild ${{ env.SOLUTION_FILE }} /t:Restore,Rebuild /p:Configuration=${{ matrix.configuration }} /p:AppxBundle=${{ env.APPX_BUNDLE }} /p:UapAppxPackageBuildMode=${{ env.PACKAGE_BUILD_MODE }} /p:Deterministic=${{ env.DETERMINISTIC }} /p:ContinuousIntegrationBuild=${{ env.CI_BUILD }} /p:Platform=${{ matrix.platform }} /p:PackageCertificateKeyFile=signingkey.pfx /p:PackageCertificatePassword=${{ env.PFX_PASSWORD }} /p:PackageOutputPath=${{ env.MSIX_OUTPUT_DIR }}
 
     - name: Delete PFX file
@@ -86,10 +97,11 @@ jobs:
         cd ${{ env.PDB_OUTPUT_DIR }}
         tar -czvf ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz ./*
 
-    - name: Copy reference assemblies
-      run: |
-        find ${{ github.workspace }} -name "*.dll" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
-        find ${{ github.workspace }} -name "*.exe" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
+    #- name: Create MSI installer
+    #  run: |
+    #    cd path/to/your/.wxs/file
+    #    candle -out ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.wixobj HeyGPT.wxs
+    #    light -out ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.msi ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.wixobj
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
@@ -105,6 +117,13 @@ jobs:
         path: ${{ env.MSIX_OUTPUT_DIR }}/**/*
         retention-days: 5
 
+    - name: Upload debug files
+      uses: actions/upload-artifact@v2
+      with:
+        name: HeyGPT-Debug-Files-${{ matrix.platform }}-${{ matrix.configuration }}
+        path: ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz
+        retention-days: 5
+
     - name: Upload reference assemblies
       uses: actions/upload-artifact@v2
       with:
@@ -112,9 +131,9 @@ jobs:
         path: ${{ env.REF_ASSEMBLIES_DIR }}/**/*
         retention-days: 30
 
-    - name: Upload debug files
-      uses: actions/upload-artifact@v2
-      with:
-        name: HeyGPT-Debug-Files-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz
-        retention-days: 5
+    #- name: Upload MSI installer
+    #  uses: actions/upload-artifact@v2
+    #  with:
+    #    name: HeyGPT-MSI-${{ matrix.platform }}-${{ matrix.configuration }}
+    #    path: ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.msi
+    #    retention-days: 5
