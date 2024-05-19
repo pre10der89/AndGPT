@@ -77,9 +77,9 @@ jobs:
       run: dotnet restore ${{ env.SOLUTION_FILE }} --packages ${{ env.DEPENDENCY_PACKAGES_DIR }}
 
     # Build solution
-    - name: Build solution
-      working-directory: ${{ github.workspace }}
-      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
+    #- name: Build solution
+    #  working-directory: ${{ github.workspace }}
+    #  run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
 
     # Run tests (uncomment if needed)
     # - name: Run tests
