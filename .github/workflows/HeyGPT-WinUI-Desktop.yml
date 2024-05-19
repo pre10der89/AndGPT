@@ -47,13 +47,6 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    # Decode PFX file
-    - name: Decode PFX file
-      shell: pwsh
-      run: |
-        $bytes = [Convert]::FromBase64String("${{ env.PFX_BASE64 }}")
-        [System.IO.File]::WriteAllBytes("signingkey.pfx", $bytes)
-
     # Create artifacts directories
     - name: Create artifacts directories
       run: |
@@ -78,24 +71,19 @@ jobs:
       working-directory: ${{ github.workspace }}
       run: dotnet restore ${{ env.SOLUTION_FILE }} --packages ${{ env.DEPENDENCY_PACKAGES_DIR }}
 
-    # Build solution
-    #- name: Build solution
-    #  working-directory: ${{ github.workspace }}
-    #  run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
-
-    # Run tests (uncomment if needed)
-    # - name: Run tests
-    #   working-directory: ${{ github.workspace }}
-    #   run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
-
-
+    # Decode PFX file
+    - name: Decode PFX file
+      shell: pwsh
+      run: |
+        $bytes = [Convert]::FromBase64String("${{ env.PFX_BASE64 }}")
+        [System.IO.File]::WriteAllBytes("signingkey.pfx", $bytes)
 
     # Copy reference assemblies
-    #- name: Copy reference assemblies
-    #  shell: pwsh
-    #  run: |
-    #    Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
-    #    Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.exe" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
+    - name: Copy reference assemblies
+      shell: pwsh
+      run: |
+        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
+        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.exe" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
 
     # Create MSIX package
     - name: Create MSIX package
@@ -118,7 +106,12 @@ jobs:
     # Gather debug files
     - name: Gather debug files
       shell: pwsh
-      run: Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.pdb" | ForEach-Object { Copy-Item $_.FullName ${{ env.PDB_OUTPUT_DIR }} }
+      run: |
+        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.pdb" | ForEach-Object {
+          if ($_.FullName -notlike "*${{ env.PDB_OUTPUT_DIR }}*") {
+            Copy-Item $_.FullName ${{ env.PDB_OUTPUT_DIR }}
+          }
+        }
 
     # Zip debug files
     - name: Zip debug files
