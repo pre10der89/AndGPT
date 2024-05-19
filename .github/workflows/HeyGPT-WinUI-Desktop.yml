@@ -128,7 +128,7 @@ jobs:
 
     # Upload build artifacts
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: HeyGPT-${{ matrix.platform }}-${{ matrix.configuration }}
         path: ${{ env.BUILD_ARTIFACTS_PATH }}\**
@@ -136,7 +136,7 @@ jobs:
 
     # Upload MSIX packages
     - name: Upload MSIX packages
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: HeyGPT-MSIX-${{ matrix.platform }}-${{ matrix.configuration }}
         path: ${{ env.MSIX_OUTPUT_DIR }}\**
@@ -144,7 +144,7 @@ jobs:
 
     # Upload debug files
     - name: Upload debug files
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: HeyGPT-Debug-Files-${{ matrix.platform }}-${{ matrix.configuration }}
         path: ${{ env.PDB_OUTPUT_DIR }}\debug_files.zip
@@ -152,7 +152,7 @@ jobs:
 
     # Upload reference assemblies
     - name: Upload reference assemblies
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: HeyGPT-Reference-Assemblies-${{ matrix.platform }}-${{ matrix.configuration }}
         path: ${{ env.REF_ASSEMBLIES_DIR }}\**
