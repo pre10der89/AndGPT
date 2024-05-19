@@ -29,12 +29,12 @@ public sealed record ClipboardContent(ClipboardDataType DataType)
         Image = image ?? throw new ArgumentNullException(nameof(image));
     }
 
-    public ClipboardContent(Uri uri) : this(ClipboardDataType.Image)
+    public ClipboardContent(Uri uri) : this(ClipboardDataType.Uri)
     {
         Uri = uri ?? throw new ArgumentNullException(nameof(uri));
     }
 
-    public ClipboardContent(ClipboardBinaryData binaryData) : this(ClipboardDataType.Image)
+    public ClipboardContent(ClipboardBinaryData binaryData) : this(ClipboardDataType.Binary)
     {
         Binary = binaryData ?? throw new ArgumentNullException(nameof(binaryData));
     }

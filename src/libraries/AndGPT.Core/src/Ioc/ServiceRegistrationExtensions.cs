@@ -10,7 +10,7 @@ public static class ServiceRegistrationExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.TryAddSingleton<IFileService, FileService>();
-        services.TryAddSingleton<IEnvironmentVariableService, EnvironmentVariableService>();
+        services.TryAddSingleton<IEnvironmentVariableService, WindowsEnvironmentVariableService>();
 
         return services;
     }

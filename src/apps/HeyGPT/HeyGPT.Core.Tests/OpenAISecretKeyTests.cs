@@ -32,8 +32,10 @@ public class OpenAISecretKeyTests
     public void Constructor_ShouldInitializeProperties_WhenValidInput()
     {
         var key = new OpenAISecretKey("sk-proj-123456789");
-        Assert.AreEqual("sk-proj-123456789", key.Value);
-        Assert.AreEqual("sk-proj-***456789", key.ObfuscateValue);
+
+        key.Value.Should().BeEquivalentTo("sk-proj-123456789");
+        key.ObfuscateValue.Should().BeEquivalentTo("sk-proj-***456789");
+
         key.IsEmpty.Should().BeFalse();
     }
 
@@ -53,44 +55,47 @@ public class OpenAISecretKeyTests
     [Test]
     public void ImplicitOperator_ShouldReturnStringValue()
     {
-        var key = new OpenAISecretKey("sk-proj-123456789");
-        var result = (string)key;
-        Assert.AreEqual("sk-proj-123456789", result);
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            var key = new OpenAISecretKey("sk-proj-123456789");
+            var result = (string)key;
+        });
     }
 
     [Test]
     public void ExplicitOperator_ShouldCreateInstanceFromString()
     {
         var key = (OpenAISecretKey)"sk-proj-123456789";
-        Assert.AreEqual("sk-proj-123456789", key.Value);
+        key.Value.Should().BeEquivalentTo("sk-proj-123456789");
     }
 
     [Test]
     public void ObfuscateString_ShouldObfuscateCorrectly()
     {
         var obfuscated = OpenAISecretKey.ObfuscateString("sk-proj-123456789");
-        Assert.AreEqual("sk-proj-***456789", obfuscated);
+        obfuscated.Should().BeEquivalentTo("sk-proj-***456789");
     }
 
     [Test]
     public void ObfuscateString_ShouldHandleNonPrefixStrings()
     {
         var obfuscated = OpenAISecretKey.ObfuscateString("123456789");
-        Assert.AreEqual("***456789", obfuscated);
+        obfuscated.Should().BeEquivalentTo("***456789");
     }
 
     [Test]
     public void ObfuscateString_ShouldHandleEmptyStrings()
     {
         var obfuscated = OpenAISecretKey.ObfuscateString("");
-        Assert.AreEqual("", obfuscated);
+
+        obfuscated.Should().BeEquivalentTo("");
     }
 
     [Test]
     public void ObfuscateString_ShouldHandleNullStrings()
     {
         var obfuscated = OpenAISecretKey.ObfuscateString(null);
-        Assert.AreEqual("", obfuscated);
+        obfuscated.Should().BeEquivalentTo("");
     }
 
     [Test]

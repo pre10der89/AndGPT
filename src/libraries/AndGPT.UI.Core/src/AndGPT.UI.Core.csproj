@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\AndGPT.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\src\AndGPT.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

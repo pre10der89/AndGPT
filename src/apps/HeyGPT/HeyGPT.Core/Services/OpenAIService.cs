@@ -84,7 +84,7 @@ public class OpenAIService : IOpenAIService
 
         PreprocessAndAddUserMessage(chatCompletionsOptions, message, extraContext);
 
-        var response = await _openAIClient.GetChatCompletionsAsync(chatCompletionsOptions);
+        var response = await _openAIClient!.GetChatCompletionsAsync(chatCompletionsOptions);
 
         return response.GetCompletionResponse(chatCharacterDetails.CharacterType);
     }

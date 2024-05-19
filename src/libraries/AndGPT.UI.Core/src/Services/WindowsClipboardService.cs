@@ -297,12 +297,20 @@ public class WindowsClipboardService : IClipboardService
     {
         ArgumentNullException.ThrowIfNull(image);
 
-        var dataPackage = new DataPackage();
-        var stream = await ClipboardHelper.WriteStreamAsync(image.Data);
+        try
+        {
+            var dataPackage = new DataPackage();
+            var stream = await ClipboardHelper.WriteStreamAsync(image.Data);
 
-        dataPackage.SetBitmap(RandomAccessStreamReference.CreateFromStream(stream));
-        
-        return SetContentOnClipboard(dataPackage, settings);
+            dataPackage.SetBitmap(RandomAccessStreamReference.CreateFromStream(stream));
+
+            return SetContentOnClipboard(dataPackage, settings);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Failed to set image on clipboard", e);
+            throw;
+        }
     }
 
     public async Task<ClipboardBinaryData> GetBinaryAsync(ClipboardFormat format)
@@ -315,7 +323,7 @@ public class WindowsClipboardService : IClipboardService
             return ClipboardBinaryData.Empty;
         }
 
-        if (await dataPackageView.GetDataAsync(platformFormat) is not IRandomAccessStream stream)
+        if (await dataPackageView.GetDataAsync(platformFormat) is not IRandomAccessStreamReference stream)
         {
             return ClipboardBinaryData.Empty;
         }
@@ -341,6 +349,7 @@ public class WindowsClipboardService : IClipboardService
 
         var platformFormat = GetPlatformSpecificFormat(ClipboardFormat.Custom(data.Format));
         var dataPackage = new DataPackage();
+
         var stream = await ClipboardHelper.WriteStreamAsync(data.Data);
 
         dataPackage.SetData(platformFormat, RandomAccessStreamReference.CreateFromStream(stream));

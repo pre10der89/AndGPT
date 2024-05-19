@@ -37,10 +37,7 @@ public sealed record OpenAISecretKey
     /// <param name="_">The <see cref="OpenAISecretKey"/> object from which the string representation will be extracted.</param>
     public static implicit operator string(OpenAISecretKey _)
     {
-        // TODO: We probably don't want the implicit operator to be used since this has very sensitive information and a simple assumption could
-        // cause its use and expose the Message.  We are trying to force all to go through the "Message" property.  Is there better ways to protect this value?
-
-        throw new InvalidOperationException("Implicit casting of this type is not allowed.  Use the 'Message' property directly");
+        throw new InvalidOperationException("Implicit casting of this type is not allowed.  Use the 'Value' property directly");
     }
 
     /// <summary>

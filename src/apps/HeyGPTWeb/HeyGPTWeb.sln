@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeyGPTWeb.App", "HeyGPTWeb.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeyGPTWeb.Core", "HeyGPTWeb.Core\HeyGPTWeb.Core.csproj", "{184CFB6C-2091-44FA-9D7E-440826AC068B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndGPT.Core", "..\..\libraries\AndGPT.Core\AndGPT.Core.csproj", "{EADC23E4-2D6D-434A-B8DE-BBECBBFA5BB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndGPT.Core", "..\..\libraries\AndGPT.Core\src\AndGPT.Core.csproj", "{EADC23E4-2D6D-434A-B8DE-BBECBBFA5BB5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndGPT.UI.Core", "..\..\libraries\AndGPT.UI.Core\AndGPT.UI.Core.csproj", "{1594EF61-C447-4EDC-A3AF-94199A1542FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AndGPT.UI.Core", "..\..\libraries\AndGPT.UI.Core\src\AndGPT.UI.Core.csproj", "{1594EF61-C447-4EDC-A3AF-94199A1542FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

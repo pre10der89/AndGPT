@@ -34,8 +34,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\AndGPT.Core.csproj" />
-		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.UI.Core\AndGPT.UI.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\src\AndGPT.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.UI.Core\src\AndGPT.UI.Core.csproj" />
 		<ProjectReference Include="..\HeyGPTWeb.Core\HeyGPTWeb.Core.csproj" />
 	</ItemGroup>
 

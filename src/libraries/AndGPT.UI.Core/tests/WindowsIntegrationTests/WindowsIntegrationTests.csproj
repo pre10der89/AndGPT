@@ -1,8 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
-		<RootNamespace>HeyGPT.Core.Tests</RootNamespace>
+		<TargetFramework>$(NetCoreAppCurrent)-$(WindowsTargetPlatformCurrent)</TargetFramework>
+		<TargetPlatformMinVersion>$(WindowsTargetPlatformVersionMinimum)</TargetPlatformMinVersion>
+		<RuntimeIdentifiers>$(RuntimeIdentifiersCurrent)</RuntimeIdentifiers>
+		<RootNamespace>WindowsIntegrationTests</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -22,7 +24,6 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk">
 			<TreatAsUsed>true</TreatAsUsed>
 		</PackageReference>
-		<PackageReference Include="Moq" />
 
 		<PackageReference Include="NUnit">
 			<TreatAsUsed>true</TreatAsUsed>
@@ -41,12 +42,11 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-
-		<PackageReference Include="Azure.AI.OpenAI" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="$(AppsBasePath)\HeyGPT\HeyGPT.Core\HeyGPT.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.Core\src\AndGPT.Core.csproj" />
+		<ProjectReference Include="$(LibrariesBasePath)\AndGPT.UI.Core\src\AndGPT.UI.Core.csproj" />
 	</ItemGroup>
   
 </Project>

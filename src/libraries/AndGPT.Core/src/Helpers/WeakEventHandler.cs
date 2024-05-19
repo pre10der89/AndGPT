@@ -16,6 +16,6 @@ public class WeakEventHandler<TEventArgs>(EventHandler<TEventArgs> handler)
         }
     }
 
-    public EventHandler<TEventArgs> HandlerProxy => Handler;
+    public EventHandler<TEventArgs> HandlerProxy => Handler!;
 }
 

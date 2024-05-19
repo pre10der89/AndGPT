@@ -2,7 +2,9 @@
 
 namespace AndGPT.Core.Services;
 
-public class EnvironmentVariableService : IEnvironmentVariableService
+// TODO: Determine if Environment is a portable type in .NET and whether we need a separate EnvironmentVariableService for each platform.
+
+public class WindowsEnvironmentVariableService : IEnvironmentVariableService
 {
     public string GetEnvironmentVariable(string variableName)
     {

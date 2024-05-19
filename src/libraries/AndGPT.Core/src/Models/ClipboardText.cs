@@ -19,6 +19,13 @@ public sealed record ClipboardText
         Format = format ?? throw new ArgumentNullException(nameof(format));
     }
 
+    public static ClipboardText Create(string text)
+    {
+        ArgumentNullException.ThrowIfNull(text);
+
+        return new ClipboardText(text, string.Empty);
+    }
+
     public static ClipboardText Create(string text, string format)
     {
         ArgumentNullException.ThrowIfNull(text);
