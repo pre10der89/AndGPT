@@ -14,16 +14,16 @@ jobs:
     runs-on: windows-latest
 
     env:
-      SOLUTION_FILE: ${{ github.workspace }}/src/apps/AndGPT.sln
-      ARTIFACTS_BASE_DIR: ${{ github.workspace }}/Artifacts
-      ARTIFACTS_BIN_DIR: ${{ github.workspace }}/Artifacts/bin
-      OUTPUT_DIR: ${{ github.workspace }}/output
-      DEPENDENCY_PACKAGES_DIR: ${{ github.workspace }}/Artifacts/DependencyPackages
-      MSIX_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSIX
-      MSI_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSI
-      BUILD_ARTIFACTS_PATH: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT
-      PDB_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/PDBs
-      REF_ASSEMBLIES_DIR: ${{ github.workspace }}/Artifacts/ReferenceAssemblies
+      SOLUTION_FILE: ${{ github.workspace }}\src\apps\AndGPT.sln
+      ARTIFACTS_BASE_DIR: ${{ github.workspace }}\Artifacts
+      ARTIFACTS_BIN_DIR: ${{ github.workspace }}\Artifacts\bin
+      OUTPUT_DIR: ${{ github.workspace }}\output
+      DEPENDENCY_PACKAGES_DIR: ${{ github.workspace }}\Artifacts\DependencyPackages
+      MSIX_OUTPUT_DIR: ${{ github.workspace }}\Artifacts\MSIX
+      MSI_OUTPUT_DIR: ${{ github.workspace }}\Artifacts\MSI
+      BUILD_ARTIFACTS_PATH: ${{ github.workspace }}\Artifacts\bin\${{ matrix.platform }}\${{ matrix.configuration }}\apps\HeyGPT
+      PDB_OUTPUT_DIR: ${{ github.workspace }}\Artifacts\PDBs
+      REF_ASSEMBLIES_DIR: ${{ github.workspace }}\Artifacts\ReferenceAssemblies
       PFX_BASE64: ${{ secrets.BASE64_ENCODED_PFX }}
       PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
 
@@ -50,12 +50,12 @@ jobs:
     # Create artifacts directories
     - name: Create artifacts directories
       run: |
-        mkdir -p ${{ env.ARTIFACTS_BIN_DIR }}
-        mkdir -p ${{ env.DEPENDENCY_PACKAGES_DIR }}
-        mkdir -p ${{ env.MSIX_OUTPUT_DIR }}
-        mkdir -p ${{ env.MSI_OUTPUT_DIR }}
-        mkdir -p ${{ env.PDB_OUTPUT_DIR }}
-        mkdir -p ${{ env.REF_ASSEMBLIES_DIR }}
+        New-Item -Path ${{ env.ARTIFACTS_BIN_DIR }} -ItemType Directory -Force
+        New-Item -Path ${{ env.DEPENDENCY_PACKAGES_DIR }} -ItemType Directory -Force
+        New-Item -Path ${{ env.MSIX_OUTPUT_DIR }} -ItemType Directory -Force
+        New-Item -Path ${{ env.MSI_OUTPUT_DIR }} -ItemType Directory -Force
+        New-Item -Path ${{ env.PDB_OUTPUT_DIR }} -ItemType Directory -Force
+        New-Item -Path ${{ env.REF_ASSEMBLIES_DIR }} -ItemType Directory -Force
 
     # Cache dependencies to speed up builds
     - name: Cache NuGet packages
@@ -76,10 +76,10 @@ jobs:
       working-directory: ${{ github.workspace }}
       run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
 
-    # Run tests
-    #- name: Run tests
-    #  working-directory: ${{ github.workspace }}
-    #  run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
+    # Run tests (uncomment if needed)
+    # - name: Run tests
+    #   working-directory: ${{ github.workspace }}
+    #   run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
 
     # Decode PFX file
     - name: Decode PFX file
@@ -88,8 +88,8 @@ jobs:
     # Copy reference assemblies
     - name: Copy reference assemblies
       run: |
-        find ${{ github.workspace }} -name "*.dll" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
-        find ${{ github.workspace }} -name "*.exe" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
+        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.dll" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
+        Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.exe" | ForEach-Object { Copy-Item $_.FullName ${{ env.REF_ASSEMBLIES_DIR }} }
 
     # Create MSIX package
     - name: Create MSIX package
@@ -104,47 +104,26 @@ jobs:
 
     # Delete PFX file
     - name: Delete PFX file
-      run: del signingkey.pfx
+      run: Remove-Item -Path signingkey.pfx -Force
 
     # Gather debug files
     - name: Gather debug files
-      run: |
-        find ${{ github.workspace }} -name "*.pdb" -exec cp {} ${{ env.PDB_OUTPUT_DIR }} \;
+      run: Get-ChildItem -Path ${{ github.workspace }} -Recurse -Filter "*.pdb" | ForEach-Object { Copy-Item $_.FullName ${{ env.PDB_OUTPUT_DIR }} }
 
     # Zip debug files
     - name: Zip debug files
-      run: |
-        cd ${{ env.PDB_OUTPUT_DIR }}
-        tar -czvf ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz ./*
+      run: Compress-Archive -Path ${{ env.PDB_OUTPUT_DIR }}\* -DestinationPath ${{ env.PDB_OUTPUT_DIR }}\debug_files.zip -Force
 
     # Upload build artifacts
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
         name: HeyGPT-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: ${{ env.BUILD_ARTIFACTS_PATH }}/**/*
+        path: ${{ env.BUILD_ARTIFACTS_PATH }}\**
         retention-days: 5
 
     # Upload MSIX packages
     - name: Upload MSIX packages
       uses: actions/upload-artifact@v2
       with:
-        name: HeyGPT-MSIX-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: ${{ env.MSIX_OUTPUT_DIR }}/**/*
-        retention-days: 5
-
-    # Upload debug files
-    - name: Upload debug files
-      uses: actions/upload-artifact@v2
-      with:
-        name: HeyGPT-Debug-Files-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz
-        retention-days: 5
-
-    # Upload reference assemblies
-    - name: Upload reference assemblies
-      uses: actions/upload-artifact@v2
-      with:
-        name: HeyGPT-Reference-Assemblies-${{ matrix.platform }}-${{ matrix.configuration }}
-        path: ${{ env.REF_ASSEMBLIES_DIR }}/**/*
-        retention-days: 30
+        name: HeyGPT-MSIX-${{ matrix.platform }}-${{ matrix.configuration 
