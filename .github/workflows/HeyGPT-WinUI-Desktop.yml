@@ -43,6 +43,11 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
+    # Install the Windows 10 SDK
+    - name: Install Windows 10 SDK
+      run: |
+        choco install windows-sdk-10.1
+
     # Setup MSBuild
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
