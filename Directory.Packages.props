@@ -19,7 +19,9 @@
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <!--Presentation (NuGet)-->
-    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240428000" />
+    <!--<PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240428000" />
+    <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />-->
+    <PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.4.231008000" />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.3233" />
     <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
