@@ -1,11 +1,12 @@
-name: Build, Test, and Package .NET Project
+name: HeyGPT
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -20,32 +21,33 @@ jobs:
       DEPENDENCY_PACKAGES_DIR: ${{ github.workspace }}/Artifacts/DependencyPackages
       MSIX_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSIX
       MSI_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSI
-      BUILD_ARTIFACTS_PATH: ${{ env.ARTIFACTS_BIN_DIR }}/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT
-      PDB_OUTPUT_DIR: ${{ env.ARTIFACTS_BASE_DIR }}/PDBs
-      REF_ASSEMBLIES_DIR: ${{ env.ARTIFACTS_BASE_DIR }}/ReferenceAssemblies
+      BUILD_ARTIFACTS_PATH: ${{ github.workspace }}/Artifacts/bin/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT
+      PDB_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/PDBs
+      REF_ASSEMBLIES_DIR: ${{ github.workspace }}/Artifacts/ReferenceAssemblies
       PFX_BASE64: ${{ secrets.BASE64_ENCODED_PFX }}
       PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
 
     strategy:
       matrix:
-        platform: [x64, arm64]
-        configuration: [Release, Debug]
+        platform: [x64] #, arm64]
+        configuration: [Release] #, Debug]
 
     steps:
+    # Checkout code
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Setup .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
 
+    # Setup MSBuild
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1.1
 
-    #- name: Install WiX Toolset
-    #  run: choco install wix
-
+    # Create artifacts directories
     - name: Create artifacts directories
       run: |
         mkdir -p ${{ env.ARTIFACTS_BIN_DIR }}
@@ -55,26 +57,41 @@ jobs:
         mkdir -p ${{ env.PDB_OUTPUT_DIR }}
         mkdir -p ${{ env.REF_ASSEMBLIES_DIR }}
 
+    # Cache dependencies to speed up builds
+    - name: Cache NuGet packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.DEPENDENCY_PACKAGES_DIR }}
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    # Restore dependencies
     - name: Restore dependencies
       working-directory: ${{ github.workspace }}
       run: dotnet restore ${{ env.SOLUTION_FILE }} --packages ${{ env.DEPENDENCY_PACKAGES_DIR }}
 
+    # Build solution
     - name: Build solution
       working-directory: ${{ github.workspace }}
       run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
 
+    # Run tests
     - name: Run tests
       working-directory: ${{ github.workspace }}
       run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
 
+    # Decode PFX file
     - name: Decode PFX file
       run: echo ${{ env.PFX_BASE64 }} | base64 -d > signingkey.pfx
 
+    # Copy reference assemblies
     - name: Copy reference assemblies
       run: |
         find ${{ github.workspace }} -name "*.dll" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
         find ${{ github.workspace }} -name "*.exe" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
 
+    # Create MSIX package
     - name: Create MSIX package
       env:
         APPX_BUNDLE: "Always"
@@ -85,24 +102,22 @@ jobs:
       working-directory: ${{ github.workspace }}
       run: msbuild ${{ env.SOLUTION_FILE }} /t:Restore,Rebuild /p:Configuration=${{ matrix.configuration }} /p:AppxBundle=${{ env.APPX_BUNDLE }} /p:UapAppxPackageBuildMode=${{ env.PACKAGE_BUILD_MODE }} /p:Deterministic=${{ env.DETERMINISTIC }} /p:ContinuousIntegrationBuild=${{ env.CI_BUILD }} /p:Platform=${{ matrix.platform }} /p:PackageCertificateKeyFile=signingkey.pfx /p:PackageCertificatePassword=${{ env.PFX_PASSWORD }} /p:PackageOutputPath=${{ env.MSIX_OUTPUT_DIR }}
 
+    # Delete PFX file
     - name: Delete PFX file
       run: del signingkey.pfx
 
+    # Gather debug files
     - name: Gather debug files
       run: |
         find ${{ github.workspace }} -name "*.pdb" -exec cp {} ${{ env.PDB_OUTPUT_DIR }} \;
 
+    # Zip debug files
     - name: Zip debug files
       run: |
         cd ${{ env.PDB_OUTPUT_DIR }}
         tar -czvf ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz ./*
 
-    #- name: Create MSI installer
-    #  run: |
-    #    cd path/to/your/.wxs/file
-    #    candle -out ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.wixobj HeyGPT.wxs
-    #    light -out ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.msi ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.wixobj
-
+    # Upload build artifacts
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -110,6 +125,7 @@ jobs:
         path: ${{ env.BUILD_ARTIFACTS_PATH }}/**/*
         retention-days: 5
 
+    # Upload MSIX packages
     - name: Upload MSIX packages
       uses: actions/upload-artifact@v2
       with:
@@ -117,6 +133,7 @@ jobs:
         path: ${{ env.MSIX_OUTPUT_DIR }}/**/*
         retention-days: 5
 
+    # Upload debug files
     - name: Upload debug files
       uses: actions/upload-artifact@v2
       with:
@@ -124,16 +141,10 @@ jobs:
         path: ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz
         retention-days: 5
 
+    # Upload reference assemblies
     - name: Upload reference assemblies
       uses: actions/upload-artifact@v2
       with:
         name: HeyGPT-Reference-Assemblies-${{ matrix.platform }}-${{ matrix.configuration }}
         path: ${{ env.REF_ASSEMBLIES_DIR }}/**/*
         retention-days: 30
-
-    #- name: Upload MSI installer
-    #  uses: actions/upload-artifact@v2
-    #  with:
-    #    name: HeyGPT-MSI-${{ matrix.platform }}-${{ matrix.configuration }}
-    #    path: ${{ env.MSI_OUTPUT_DIR }}/HeyGPT.msi
-    #    retention-days: 5
