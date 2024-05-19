@@ -18,7 +18,7 @@
 		<UseCommonOutputDirectory>false</UseCommonOutputDirectory>
 		<OutputPath>$(AppsOutputDirectory)</OutputPath>
 		<OutDir>$(OutputPath)</OutDir>
-		<PackageCertificateThumbprint>C9183AD9FD6407A3D9B8C9971A957E6D58437825</PackageCertificateThumbprint>
+		<PackageCertificateThumbprint>72D5363C5A721C70A27238E2665F553881ECD1EF</PackageCertificateThumbprint>
 		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
 		<UserSecretsId>31bc2eec-699d-4168-86dc-4858497c7537</UserSecretsId>
 	</PropertyGroup>

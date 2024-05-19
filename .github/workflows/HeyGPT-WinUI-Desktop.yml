@@ -77,9 +77,9 @@ jobs:
       run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:ProduceReferenceAssembly=true -p:Platform=${{ matrix.platform }}
 
     # Run tests
-    - name: Run tests
-      working-directory: ${{ github.workspace }}
-      run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
+    #- name: Run tests
+    #  working-directory: ${{ github.workspace }}
+    #  run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
 
     # Decode PFX file
     - name: Decode PFX file

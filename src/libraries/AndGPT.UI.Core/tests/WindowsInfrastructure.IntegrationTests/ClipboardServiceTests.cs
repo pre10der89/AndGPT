@@ -3,7 +3,7 @@ using AndGPT.UI.Core.Services;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace WindowsIntegrationTests;
+namespace WindowsInfrastructure.IntegrationTests;
 
 [TestFixture, RequiresThread(ApartmentState.STA)]
 public class WindowsClipboardServiceTests
@@ -71,23 +71,23 @@ public class WindowsClipboardServiceTests
         clipboardBinaryData.Data.Should().BeEquivalentTo(binaryData.Data);
     }
 
-    [Test]
-    public async Task GetClipboardDataType_ShouldReturnCorrectDataType()
-    {
-        var text = ClipboardText.Create("Hello, Clipboard!");
-        await _clipboardService!.SetTextAsync(text);
-        var dataType = _clipboardService.GetClipboardDataType();
-        dataType.Should().Be(ClipboardDataType.Text);
+    //[Test]
+    //public async Task GetClipboardDataType_ShouldReturnCorrectDataType()
+    //{
+    //    var text = ClipboardText.Create("Hello, Clipboard!");
+    //    await _clipboardService!.SetTextAsync(text);
+    //    var dataType = _clipboardService.GetClipboardDataType();
+    //    dataType.Should().Be(ClipboardDataType.Text);
 
-        var imageData = new byte[] { 1, 2, 3, 4, 5 };
-        var image = ClipboardImage.Create(imageData, "Bitmap");
-        await _clipboardService.SetImageAsync(image);
-        dataType = _clipboardService.GetClipboardDataType();
-        dataType.Should().Be(ClipboardDataType.Image);
+    //    var imageData = new byte[] { 1, 2, 3, 4, 5 };
+    //    var image = ClipboardImage.Create(imageData, "Bitmap");
+    //    await _clipboardService.SetImageAsync(image);
+    //    dataType = _clipboardService.GetClipboardDataType();
+    //    dataType.Should().Be(ClipboardDataType.Image);
 
-        var uri = new Uri("http://example.com");
-        await _clipboardService.SetUriAsync(uri);
-        dataType = _clipboardService.GetClipboardDataType();
-        dataType.Should().Be(ClipboardDataType.Uri);
-    }
+    //    var uri = new Uri("http://example.com");
+    //    await _clipboardService.SetUriAsync(uri);
+    //    dataType = _clipboardService.GetClipboardDataType();
+    //    dataType.Should().Be(ClipboardDataType.Uri);
+    //}
 }

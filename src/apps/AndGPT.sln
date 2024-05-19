@@ -53,7 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "Integra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{3F4DAA15-E6E7-480F-B9C3-17AA082AA49A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsIntegrationTests", "..\libraries\AndGPT.UI.Core\tests\WindowsIntegrationTests\WindowsIntegrationTests.csproj", "{9A6D6F67-737F-4058-99DF-E6E4765DA66A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsInfrastructure.IntegrationTests", "..\libraries\AndGPT.UI.Core\tests\WindowsInfrastructure.IntegrationTests\WindowsInfrastructure.IntegrationTests.csproj", "{AD147ABA-0DA1-4839-9ABF-2464A33F284B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,14 +135,14 @@ Global
 		{0772CB20-D514-4A79-A0F2-86257484C686}.Release|arm64.Build.0 = Release|arm64
 		{0772CB20-D514-4A79-A0F2-86257484C686}.Release|x64.ActiveCfg = Release|x64
 		{0772CB20-D514-4A79-A0F2-86257484C686}.Release|x64.Build.0 = Release|x64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Debug|arm64.ActiveCfg = Debug|arm64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Debug|arm64.Build.0 = Debug|arm64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Debug|x64.ActiveCfg = Debug|x64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Debug|x64.Build.0 = Debug|x64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Release|arm64.ActiveCfg = Release|arm64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Release|arm64.Build.0 = Release|arm64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Release|x64.ActiveCfg = Release|x64
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A}.Release|x64.Build.0 = Release|x64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Debug|arm64.ActiveCfg = Debug|arm64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Debug|arm64.Build.0 = Debug|arm64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Debug|x64.ActiveCfg = Debug|x64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Debug|x64.Build.0 = Debug|x64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Release|arm64.ActiveCfg = Release|arm64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Release|arm64.Build.0 = Release|arm64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Release|x64.ActiveCfg = Release|x64
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -163,7 +163,7 @@ Global
 		{1A1B937A-8723-4EF1-A8D0-93139AADEA10} = {B5FA4407-3C8C-41ED-B04E-FE0B265088B4}
 		{C5D53064-A4BD-4FD4-BA11-249CE6076F6F} = {B5FA4407-3C8C-41ED-B04E-FE0B265088B4}
 		{3F4DAA15-E6E7-480F-B9C3-17AA082AA49A} = {C5D53064-A4BD-4FD4-BA11-249CE6076F6F}
-		{9A6D6F67-737F-4058-99DF-E6E4765DA66A} = {3F4DAA15-E6E7-480F-B9C3-17AA082AA49A}
+		{AD147ABA-0DA1-4839-9ABF-2464A33F284B} = {3F4DAA15-E6E7-480F-B9C3-17AA082AA49A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {57F97965-58FA-4C31-BB67-457172729497}
