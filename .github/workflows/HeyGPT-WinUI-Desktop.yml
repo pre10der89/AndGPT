@@ -21,6 +21,7 @@ jobs:
       MSIX_OUTPUT_DIR: ${{ github.workspace }}/Artifacts/MSIX
       BUILD_ARTIFACTS_PATH: ${{ env.ARTIFACTS_BIN_DIR }}/${{ matrix.platform }}/${{ matrix.configuration }}/apps/HeyGPT
       PDB_OUTPUT_DIR: ${{ env.ARTIFACTS_BASE_DIR }}/PDBs
+      REF_ASSEMBLIES_DIR: ${{ env.ARTIFACTS_BASE_DIR }}/ReferenceAssemblies
       PFX_BASE64: ${{ secrets.BASE64_ENCODED_PFX }}
       PFX_PASSWORD: ${{ secrets.PFX_PASSWORD }}
 
@@ -47,14 +48,18 @@ jobs:
         mkdir -p ${{ env.DEPENDENCY_PACKAGES_DIR }}
         mkdir -p ${{ env.MSIX_OUTPUT_DIR }}
         mkdir -p ${{ env.PDB_OUTPUT_DIR }}
+        mkdir -p ${{ env.REF_ASSEMBLIES_DIR }}              
 
     - name: Restore dependencies
+      working-directory: ${{ github.workspace }}
       run: dotnet restore ${{ env.SOLUTION_FILE }} --packages ${{ env.DEPENDENCY_PACKAGES_DIR }}
 
     - name: Build solution
-      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:Deterministic=true -p:ContinuousIntegrationBuild=true -p:Platform=${{ matrix.platform }}
+      working-directory: ${{ github.workspace }}
+      run: dotnet build ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-restore -p:ContinuousIntegrationBuild=true -p:Deterministic=true -p:Platform=${{ matrix.platform }}
 
     - name: Run tests
+      working-directory: ${{ github.workspace }}
       run: dotnet test ${{ env.SOLUTION_FILE }} --configuration ${{ matrix.configuration }} --no-build --verbosity normal -p:Platform=${{ matrix.platform }}
 
     - name: Decode PFX file
@@ -63,7 +68,7 @@ jobs:
     - name: Create MSIX package
       env:
         APPX_BUNDLE: "Always"
-        PACKAGE_BUILD_MODE: "StoreUpload"
+        PACKAGE_BUILD_MODE: "SideLoad"
         DETERMINISTIC: "true"
         CI_BUILD: "true"
         MSIX_OUTPUT_DIR: ${{ env.MSIX_OUTPUT_DIR }}
@@ -81,6 +86,11 @@ jobs:
         cd ${{ env.PDB_OUTPUT_DIR }}
         tar -czvf ${{ env.PDB_OUTPUT_DIR }}/debug_files.tar.gz ./*
 
+    - name: Copy reference assemblies
+      run: |
+        find ${{ github.workspace }} -name "*.dll" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
+        find ${{ github.workspace }} -name "*.exe" -exec cp {} ${{ env.REF_ASSEMBLIES_DIR }} \;
+
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -94,6 +104,13 @@ jobs:
         name: HeyGPT-MSIX-${{ matrix.platform }}-${{ matrix.configuration }}
         path: ${{ env.MSIX_OUTPUT_DIR }}/**/*
         retention-days: 5
+
+    - name: Upload reference assemblies
+      uses: actions/upload-artifact@v2
+      with:
+        name: HeyGPT-Reference-Assemblies-${{ matrix.platform }}-${{ matrix.configuration }}
+        path: ${{ env.REF_ASSEMBLIES_DIR }}/**/*
+        retention-days: 30
 
     - name: Upload debug files
       uses: actions/upload-artifact@v2

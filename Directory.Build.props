@@ -8,6 +8,20 @@
 		<NetCoreAppCurrent>net8.0</NetCoreAppCurrent>
 	</PropertyGroup>
 
+	<PropertyGroup>
+    	<Deterministic>true</Deterministic>
+    	<!-- <SourceLink>Create</SourceLink> -->
+  	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(ContinuousIntegrationBuild)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+		<ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+	</PropertyGroup>
+
 	<PropertyGroup Label="Roots">
 		<RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
 		<BaseDirectory>$(RepositoryRoot)</BaseDirectory>
@@ -44,6 +58,6 @@
 		<Platforms>$(PlatformsCurrent)</Platforms>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<DefaultItemExcludes>$(DefaultItemExcludes);**/bin/**;**/obj/**;**/*.bak;**/packages.lock.json</DefaultItemExcludes>
+		<DefaultItemExcludes>$(DefaultItemExcludes);**/bin/**;**/obj/**;**/*.zip;**/*.bak;**/packages.lock.json</DefaultItemExcludes>
 	</PropertyGroup>
 </Project>
