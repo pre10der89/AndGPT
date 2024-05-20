@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>$(NetCoreAppCurrent)</TargetFramework>
+		<RootNamespace>OpenAI.OpenAPI</RootNamespace>
+		<RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+		<Nullable>disable</Nullable>
+		<!--<GenerateDocumentationFile>true</GenerateDocumentationFile>-->
+	</PropertyGroup>
+
+	<PropertyGroup Label="NSwag">
+		<NSwagConfiguration>$(MSBuildProjectDirectory)\OpenAI.NSwag.json</NSwagConfiguration>
+		<!--<OpenApiDocument>$(ThirdPartyBasePath)/OpenAI/Specs/openapi.swagger.json</OpenApiDocument>-->
+		<OpenApiDocument>$(ThirdPartyBasePath)/OpenAI/Specs/openapi.yaml</OpenApiDocument>
+		<!--<OpenApiDocument>https://github.com/openai/openai-openapi/blob/master/openapi.yaml</OpenApiDocument>-->
+		<ClientNamespace>$(RootNamespace).Core</ClientNamespace>
+		<ContractsNamespace>$(RootNamespace).Contracts</ContractsNamespace>
+		<ClientClassName>OpenAIClient</ClientClassName>
+		<ClientOutput>OpenAIClient.g.cs</ClientOutput>
+		<ContractsOutput>OpenAIClient.Contracts.g.cs</ContractsOutput>
+		<DocumentationOutput>docs/index.html</DocumentationOutput>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+		<PackageReference Include="NSwag.Core" />
+		<PackageReference Include="NSwag.MSBuild">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<Target Name="NSwag" BeforeTargets="Build">
+
+		<Exec Command="$(NSwagExe_Net80) run $(NSwagConfiguration) /variables:Configuration=$(Configuration),ClientClassName=$(ClientClassName),ClientNamespace=$(ClientNamespace),ClientOutput=$(ClientOutput),ContractsNamespace=$(ContractsNamespace),ContractsOutput=$(ContractsOutput),OpenApiDocument=$(OpenApiDocument)" />
+	</Target>
+</Project>

@@ -28,6 +28,7 @@
 		<BaseSourceDirectory>$(BaseDirectory)/src</BaseSourceDirectory>
 		<AppsBasePath>$(BaseSourceDirectory)/apps</AppsBasePath>
 		<LibrariesBasePath>$(BaseSourceDirectory)/libraries</LibrariesBasePath>
+		<ThirdPartyBasePath>$(BaseDirectory)thirdparty</ThirdPartyBasePath>
 
 		<BaseOutputDirectory>$([MSBuild]::NormalizeDirectory('$(BaseDirectory)', 'Artifacts'))</BaseOutputDirectory>
 
