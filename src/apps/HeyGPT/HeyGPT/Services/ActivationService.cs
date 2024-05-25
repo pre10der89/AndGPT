@@ -21,7 +21,6 @@ public class ActivationService : IActivationService
     private UIElement? _shell;
     private int _activationCount;
 
-    //public ActivationService(ActivationHandler<AppActivationArguments> defaultHandler, IEnumerable<IActivationHandler> activationHandlers, IThemeSelectorService themeSelectorService)
     public ActivationService(
         [FromKeyedServices(ActivationHandlerKeys.DefaultServiceKey)] IActivationHandler defaultHandler,
         [FromKeyedServices(ActivationHandlerKeys.OtherServiceKey)] IEnumerable<IActivationHandler> activationHandlers,

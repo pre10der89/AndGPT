@@ -304,6 +304,8 @@ public partial class LetsChatViewModel : ObservableRecipient
         }
     }
 
+    // TODO: The protocol activation handler should construct a domain model that has all the information
+    // We shouldn't need to parse anything here... 
     public static (string Character, string Message) ParseHeyProtocolUri(Uri uri)
     {
         // Ensure the URI is in the correct format
