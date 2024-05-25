@@ -13,6 +13,7 @@ public interface ICharacterService
 
     void SetSelected(ChatCharacterViewModel selected);
 
+    ChatCharacterDetails GetCharacter(CharacterType characterType);
 
     ChatCharacterDetails GetSelectedCharacterDetails();
 }

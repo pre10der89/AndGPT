@@ -1,0 +1,34 @@
+[
+    {
+        "Character": "pirate",
+        "Message": "What is your opinion on this proverb: 'The fear of the Lord is the beginning of wisdom.' - Proverbs 9:10"
+    },
+    {
+        "Character": "pirate",
+        "Message": "What is your opinion on this proverb: 'Trust in the Lord with all your heart and lean not on your own understanding.' - Proverbs 3:5"
+    },
+    {
+        "Character": "pirate",
+        "Message": "What is your opinion on this proverb: 'A cheerful heart is good medicine, but a crushed spirit dries up the bones.' - Proverbs 17:22"
+    },
+    {
+        "Character": "magician",
+        "Message": "What is your opinion on this proverb: 'Commit to the Lord whatever you do, and he will establish your plans.' - Proverbs 16:3"
+    },
+    {
+        "Character": "magician",
+        "Message": "What is your opinion on this proverb: 'Above all else, guard your heart, for everything you do flows from it.' - Proverbs 4:23"
+    },
+    {
+        "Character": "magician",
+        "Message": "What is your opinion on this proverb: 'Iron sharpens iron, and one man sharpens another.' - Proverbs 27:17"
+    },
+    {
+        "Character": "default",
+        "Message": "What is your opinion on this proverb: 'The name of the Lord is a strong tower; the righteous run to it and are safe.' - Proverbs 18:10"
+    },
+    {
+        "Character": "default",
+        "Message": "What is your opinion on this proverb: 'A gentle answer turns away wrath, but a harsh word stirs up anger.' - Proverbs 15:1"
+    }
+]

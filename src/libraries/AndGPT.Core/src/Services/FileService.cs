@@ -8,6 +8,18 @@ namespace AndGPT.Core.Services;
 
 public class FileService : IFileService
 {
+    public string ReadAllText(string path)
+    {
+        return File.Exists(path) ? File.ReadAllText(path) : default;
+    }
+
+    public string ReadAllText(string folderPath, string fileName)
+    {
+        var path = Path.Combine(folderPath, fileName);
+        
+        return ReadAllText(path);
+    }
+
     public T Read<T>(string folderPath, string fileName)
     {
         var path = Path.Combine(folderPath, fileName);

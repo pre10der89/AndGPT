@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:genTemplate="http://schemas.microsoft.com/appx/developer/templatestudio" xmlns:com="http://schemas.microsoft.com/appx/manifest/com/windows10" xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10" IgnorableNamespaces="uap rescap genTemplate">
-  <Identity Name="45086b1d-5f11-4f5c-872d-76650679ea06" Publisher="CN=14086" Version="1.0.0.0" />
+  <Identity Name="HeyGPT" Publisher="CN=14086" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="45086b1d-5f11-4f5c-872d-76650679ea06" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>AndGPT.App</DisplayName>
-    <PublisherDisplayName>14086</PublisherDisplayName>
+    <PublisherDisplayName>AndGPT</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -31,18 +31,31 @@
             </com:ExeServer>
           </com:ComServer>
         </com:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="hey">
+            <uap:DisplayName>HeyGPT</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="gpt">
+            <uap:DisplayName>HeyGPT(2)</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="heygpt">
+            <uap:SupportedFileTypes>
+              <uap:FileType ContentType="application/text">.heygpt</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap:InfoTip>Click on me to open HeyGPT</uap:InfoTip>
+            <uap:Logo>Assets\ChatGPT.png</uap:Logo>
+            <uap:DisplayName>HeyGPT Files</uap:DisplayName>
+            <uap:EditFlags AlwaysUnsafe="true"/>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
   </Capabilities>
-  <genTemplate:Metadata>
-    <genTemplate:Item Name="generator" Message="Template Studio" />
-    <genTemplate:Item Name="wizardVersion" Version="v5.5" />
-    <genTemplate:Item Name="projectType" Message="NavView" />
-    <genTemplate:Item Name="framework" Message="MVVMToolkit" />
-    <genTemplate:Item Name="platform" Message="WinUI" />
-    <genTemplate:Item Name="appmodel" Message="Desktop" />
-  </genTemplate:Metadata>
 </Package>

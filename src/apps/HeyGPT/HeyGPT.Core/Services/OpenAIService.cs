@@ -74,9 +74,9 @@ public class OpenAIService : IOpenAIService
 
         var chatCompletionsOptions = new ChatCompletionsOptions
         {
-            DeploymentName = DefaultModelVersion
+            DeploymentName = DefaultModelVersion,
+            MaxTokens = 1000
         };
-
 
         SetPromptOptions(chatCompletionsOptions, chatCharacterDetails);
 

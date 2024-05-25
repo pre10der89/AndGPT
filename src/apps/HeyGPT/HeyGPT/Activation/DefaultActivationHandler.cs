@@ -1,11 +1,14 @@
-﻿using HeyGPT.App.Contracts.Services;
+﻿using Windows.ApplicationModel.Activation;
+using HeyGPT.App.Contracts.Services;
 using HeyGPT.App.ViewModels;
-using Microsoft.UI.Xaml;
+using Microsoft.Windows.AppLifecycle;
 
 namespace HeyGPT.App.Activation;
 
-public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventArgs>
+public class DefaultActivationHandler : ActivationHandler<AppActivationArguments>
 {
+    public const string ServiceName = "Default";
+
     private readonly INavigationService _navigationService;
 
     public DefaultActivationHandler(INavigationService navigationService)
@@ -13,15 +16,24 @@ public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventAr
         _navigationService = navigationService;
     }
 
-    protected override bool CanHandleInternal(LaunchActivatedEventArgs args)
+    public override string Name => ServiceName;
+
+    protected override bool CanHandleInternal(AppActivationArguments args)
     {
-        // None of the ActivationHandlers has handled the activation.
+        // Accessing the "Frame" here requires that we are on the UIThread.
         return _navigationService.Frame?.Content == null;
     }
 
-    protected async override Task HandleInternalAsync(LaunchActivatedEventArgs args)
+    protected async override Task HandleInternalAsync(AppActivationArguments args)
     {
-        _navigationService.NavigateTo(typeof(LetsChatViewModel).FullName!, args.Arguments);
+        object? parameter = null;
+
+        if (args.Data is ILaunchActivatedEventArgs launchActivatedEventArgs)
+        {
+            parameter = launchActivatedEventArgs.Arguments;
+        }
+
+        _navigationService.NavigateTo(typeof(LetsChatViewModel).FullName!, parameter);
 
         await Task.CompletedTask;
     }
