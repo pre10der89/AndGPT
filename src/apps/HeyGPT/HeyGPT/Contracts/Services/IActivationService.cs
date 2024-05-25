@@ -1,6 +1,8 @@
-﻿namespace HeyGPT.App.Contracts.Services;
+﻿using Microsoft.UI.Xaml;
+
+namespace HeyGPT.App.Contracts.Services;
 
 public interface IActivationService
 {
-    Task ActivateAsync(object activationArgs);
+    Task LaunchAsync(LaunchActivatedEventArgs args);
 }

@@ -19,6 +19,7 @@
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.WindowsAppSDK" />
 	  <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+	  <PackageReference Include="System.Diagnostics.EventLog" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -27,6 +28,5 @@
 
 	<ItemGroup>
 	  <Folder Include="Contracts\Services\" />
-	  <Folder Include="Events\" />
 	</ItemGroup>
 </Project>

@@ -12,6 +12,11 @@
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<DefaultLanguage>en-us</DefaultLanguage>
+		<IsSingleInstanceApp>true</IsSingleInstanceApp>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(IsSingleInstanceApp)'=='true'">
+		<DefineConstants>DISABLE_XAML_GENERATED_MAIN</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup>

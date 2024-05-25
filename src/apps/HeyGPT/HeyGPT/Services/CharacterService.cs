@@ -1,4 +1,5 @@
 ﻿using AndGPT.UI.Core.Helpers;
+using HeyGPT.App.Activation;
 using HeyGPT.App.Contracts.Services;
 using HeyGPT.App.ViewModels;
 using HeyGPT.Core.Models;
@@ -13,7 +14,6 @@ namespace HeyGPT.App.Services;
 
 public class CharacterService : ICharacterService
 {
-
     public CharacterService()
     {
         Characters = LoadCharacters();
@@ -46,6 +46,34 @@ public class CharacterService : ICharacterService
     public void SetSelected(ChatCharacterViewModel? selected)
     {
         Selected = selected ?? DefaultCharacter;
+    }
+
+    public ChatCharacterDetails GetCharacter(CharacterType characterType)
+    {
+        var character = Characters.FirstOrDefault(x => x.CharacterType == characterType);
+
+        // Yuck!!!!!
+
+        if (character is null)
+        {
+            return new ChatCharacterDetails
+            {
+                RoleDisplayName = DefaultCharacter.RoleDisplayName,
+                CharacterType = DefaultCharacter.CharacterType,
+                AdditionalCharacteristics = [.. DefaultCharacter.CharacterPrompts],
+                Temperature = DefaultCharacter.Temperature,
+                ShouldBePithy = DefaultCharacter.Pithy
+            };
+        }
+
+        return new ChatCharacterDetails
+        {
+            RoleDisplayName = character.RoleDisplayName,
+            CharacterType = character.CharacterType,
+            AdditionalCharacteristics = [.. character.CharacterPrompts],
+            Temperature = character.Temperature,
+            ShouldBePithy = character.Pithy
+        };
     }
 
     public ChatCharacterDetails GetSelectedCharacterDetails()
