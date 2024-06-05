@@ -1,7 +1,10 @@
 ﻿using AndGPT.Core.Contracts.Services;
 using AndGPT.Core.Ioc;
 using AndGPT.Core.Services;
+using AndGPT.UI.Core.Contracts.Contracts;
 using AndGPT.UI.Core.IoC;
+using AndGPT.UI.Core.Models;
+using AndGPT.UI.Core.Services;
 using HeyGPT.App.Activation;
 using HeyGPT.App.Contracts.Policies;
 using HeyGPT.App.Contracts.Services;

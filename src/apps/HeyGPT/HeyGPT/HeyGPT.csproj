@@ -9,6 +9,7 @@
 		<RuntimeIdentifiers>$(RuntimeIdentifiersCurrent)</RuntimeIdentifiers>
 		<PublishProfile>Properties\PublishProfiles\win10-$(Platform).pubxml</PublishProfile>
 		<UseWinUI>true</UseWinUI>
+		<!--<EnableMsixTooling>true</EnableMsixTooling>-->
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 		<DefaultLanguage>en-us</DefaultLanguage>

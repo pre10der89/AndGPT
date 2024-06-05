@@ -19,6 +19,7 @@
     <PackageVersion Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.2" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Windows.Compatibility" Version="8.0.5" />
     <!--Presentation (NuGet)-->
     <!--<PackageVersion Include="Microsoft.WindowsAppSDK" Version="1.5.240428000" />
@@ -32,6 +33,7 @@
     <PackageVersion Include="NSwag.Core" Version="14.0.7" />
     <PackageVersion Include="NSwag.MSBuild" Version="14.0.7" />
     <PackageVersion Include="System.Diagnostics.EventLog" Version="8.0.0" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
     <PackageVersion Include="WinUIEx" Version="2.3.4" />
     <!--Third-Party (NuGet)-->
     <PackageVersion Include="FluentValidation" Version="11.9.0" />

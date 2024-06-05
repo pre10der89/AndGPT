@@ -1,4 +1,4 @@
-﻿namespace HeyGPT.App.Models;
+﻿namespace AndGPT.UI.Core.Models;
 
 public class LocalSettingsOptions
 {
