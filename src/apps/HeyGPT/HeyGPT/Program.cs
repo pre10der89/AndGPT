@@ -3,15 +3,15 @@
 // pausing execution of the application allowing you to attach the debugger.  Dismiss the message
 // box and program execution will continue.
 
-#define WAIT_FOR_DEBUGGER_TO_ATTACH
+// #define WAIT_FOR_DEBUGGER_TO_ATTACH
 
 #nullable disable
 
-using System.Diagnostics;
-using HeyGPT.App.Helpers;
 using Microsoft.UI.Dispatching;
 using Microsoft.Windows.AppLifecycle;
 using WinRT;
+using System.Diagnostics;
+using HeyGPT.App.Helpers;
 
 namespace HeyGPT.App;
 
